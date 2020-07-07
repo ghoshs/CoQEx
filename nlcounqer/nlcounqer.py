@@ -6,6 +6,9 @@ import spacy
 from spacy.tokens import DocBin
 import json
 import pprint
+import signal
+import sys, os
+import glob
 
 from bing_search.bing_search import call_bing_api
 
@@ -15,16 +18,17 @@ except ImportError:
 	import urllib.request as myurllib
 
 
-# define cache path
+# define paths
 cache_path = 'static/data/'
+tmp_path = './'
 
 # setup BERT server 
-from bert_serving.server.helper import get_args_parser
+from bert_serving.server.helper import get_args_parser, get_shutdown_parser
 from bert_serving.server import BertServer
 ## server edit
-# model_dir = '/root/main/bert_model/cased_L-12_H-768_A-12/'
-model_dir = '/home/shrestha/Documents/PhD/BERT_models/cased_L-12_H-768_A-12/'
-
+model_dir = '/root/main/bert_model/cased_L-12_H-768_A-12/'
+# model_dir = '/home/shrestha/Documents/PhD/BERT_models/cased_L-12_H-768_A-12/'
+server = None
 
 args = get_args_parser().parse_args(['-model_dir', model_dir,
                                      '-port', '5555',
@@ -32,8 +36,36 @@ args = get_args_parser().parse_args(['-model_dir', model_dir,
                                      '-max_seq_len', 'NONE',
                                      '-mask_cls_sep',
                                      '-cpu'])
-server = BertServer(args)
+shut_args = get_shutdown_parser().parse_args(['-ip','localhost','-port','5555','-timeout','5000'])
 
+# BERT server setup
+def setupBERT():
+	if server is None:
+		return BertServer(args)
+	else:
+		return server
+
+# app graceful shutdown
+def signal_handler(signal, frame):
+	# shutdown bert server
+	server.shutdown(shut_args)
+	# remove tmp files
+	files = glob.glob(tmp_path+'tmp*/*', recursive=True)
+	folders = ['/'.join(file.split('/')[:-1]) for file in files]
+	for file in files:
+		try:
+			os.remove(file)
+		except OSError:
+			print('Cannot delete file: ', file)
+	for folder in folders:
+		try:
+			os.rmdir(folder)
+		except OSError:
+			print('Cannot delete folder: ', folder)
+	# shut down server
+	sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
 
 # flask app config
 app = Flask(__name__)
@@ -63,15 +95,17 @@ def free_text_query():
 	# check for optional arguments from aggregator calls
 	snippetfile = args['snippetcache'] if 'snippetcache' in args else None
 	model = args['model'] if 'model' in args else None
+	threshold = float(args['threshold']) if 'threshold' in args else None
+	config = float(args['config']) if 'config' in args else None
 	
-	print("Query:: ", query)
-	if snippetfile is None or model is None:
-		response = text_tags(query, numsnippets) if len(query) > 0 else {}
+	print("Query: ", query, " #snippets: ", numsnippets, " Model: ", model, " Threshold: ", threshold, " Config: ", config)
+	if snippetfile is None:
+		response = text_tags(query, numsnippets, model, config, threshold) if len(query) > 0 else {}
 	else:
 		with open(cache_path+snippetfile) as fp:
 			all_snippets = json.load(fp)
 		snippets = all_snippets[query]
-		response = text_tags(query, numsnippets, model, snippets)
+		response = text_tags(query, numsnippets, model, config, threshold, snippets)
 	# pprint.pprint(response, width=160)
 	return jsonify(response)
 
@@ -83,9 +117,8 @@ def display_mainpage():
 
 if __name__ == '__main__':
 	# start BERT server
-	server.start()
+	# server = setupBERT()
+	# server.start()
 	## server edit ##
     # app.run(debug=True)
 	app.run(debug=True, port=5000)
-
-	# server.close()
