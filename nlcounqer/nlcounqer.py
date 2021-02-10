@@ -1,16 +1,12 @@
 from flask import Flask, render_template, url_for, json, request, jsonify, send_from_directory
 from flask_cors import CORS, cross_origin
-# from get_count_data import related_predicate
-from free_text_search import text_tags
-import spacy
-from spacy.tokens import DocBin
+from pipeline import pipeline
 import json
 import pprint
 import signal
 import sys, os
 import glob
-
-from bing_search.bing_search import call_bing_api
+from retrieval.bing_search import call_bing_api
 
 try: 
 	import urllib2 as myurllib
@@ -22,28 +18,6 @@ except ImportError:
 cache_path = 'static/data/'
 tmp_path = './'
 
-# setup BERT server 
-from bert_serving.server.helper import get_args_parser, get_shutdown_parser
-from bert_serving.server import BertServer
-## server edit
-model_dir = '/root/main/bert_model/cased_L-12_H-768_A-12/'
-# model_dir = '/home/shrestha/Documents/PhD/BERT_models/cased_L-12_H-768_A-12/'
-server = None
-
-args = get_args_parser().parse_args(['-model_dir', model_dir,
-                                     '-port', '5555',
-                                     '-port_out', '5556',
-                                     '-max_seq_len', 'NONE',
-                                     '-mask_cls_sep',
-                                     '-cpu'])
-shut_args = get_shutdown_parser().parse_args(['-ip','localhost','-port','5555','-timeout','5000'])
-
-# BERT server setup
-def setupBERT():
-	if server is None:
-		return BertServer(args)
-	else:
-		return server
 
 # app graceful shutdown
 def signal_handler(signal, frame):
@@ -72,6 +46,7 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+## Endpoint for accessing snippets for rmeote computations
 @app.route('/snippets', methods=['GET', 'POST'])
 @cross_origin()
 def get_snippets():
@@ -82,30 +57,21 @@ def get_snippets():
 	# pprint.pprint(response, width=160)
 	return jsonify(response)
 
+## endpoint for 
 @app.route('/ftresults', methods=['GET', 'POST'])
 @cross_origin()
 def free_text_query():
-	## query parsing for displacy code
-	# query = json.loads(request.data.decode())['text']
 	# query parsing for ajax call
 	args = request.args
 	query = args['query']
 	numsnippets = args['snippets'] 
 	
 	# check for optional arguments from aggregator calls
-	snippetfile = args['snippetcache'] if 'snippetcache' in args else None
 	model = args['model'] if 'model' in args else None
-	threshold = float(args['threshold']) if 'threshold' in args else None
-	config = float(args['config']) if 'config' in args else None
+	aggregator = args['aggregator'] if 'aggregator' in args else None
 	
-	print("Query: ", query, " #snippets: ", numsnippets, " Model: ", model, " Threshold: ", threshold, " Config: ", config)
-	if snippetfile is None:
-		response = text_tags(query, numsnippets, model, config, threshold) if len(query) > 0 else {}
-	else:
-		with open(cache_path+snippetfile) as fp:
-			all_snippets = json.load(fp)
-		snippets = all_snippets[query]
-		response = text_tags(query, numsnippets, model, config, threshold, snippets)
+	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n", (query, numsnippets, model, aggregator))
+	response = pipeline(query, numsnippets, model, aggregator) if len(query) > 0 else {}
 	# pprint.pprint(response, width=160)
 	return jsonify(response)
 
@@ -116,9 +82,4 @@ def display_mainpage():
 	return render_template('index.html')
 
 if __name__ == '__main__':
-	# start BERT server
-	# server = setupBERT()
-	# server.start()
-	## server edit ##
-    # app.run(debug=True)
 	app.run(debug=True, port=5000)
