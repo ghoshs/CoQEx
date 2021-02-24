@@ -1,5 +1,6 @@
 import sys
 import pprint
+from collections import defaultdict
 #### server edit
 # sys.path.append('/nlcounqer')
 sys.path.append('//nlcounqer')
@@ -13,31 +14,50 @@ def pipeline(query, max_results=10, model="default", aggregator="weighted"):
 	result = {}
 	
 	### 1. Query modeling: namedtuple QTuples('type', 'entity', 'relation' 'context')
+	print('Getting query tuples')
 	qtuples = get_qtuples(query, 'en_core_web_sm')
 	
 	### 2. Document retrieval (Bing/Wikipedia): JSON 
+	print('Retrieving relevant documents')
 	results = call_bing_api(query, max_results)
 		
 	### 3. Count predictions
-	count_prediction, count_data, count_annotations = predict_count(query, results, model, aggregator)
+	print('Count prediction')
+	count_prediction, count_data, results = predict_count(query, results, model, aggregator)
+	count_data_fdict = defaultdict(int)
+	for num, score, id, text in count_data:
+		count_data_fdict[num] += 1
+	count_data_fdict = sorted(count_data_fdict.items(), key=lambda x:x[1], reverse=True)
+	count_data_fdict_all = sorted(count_data, key=lambda x: x[1], reverse=True)	
 
 	### 4. Enumeration predction
-	# predict_enumerations(query, qtuples, results)
-
-
+	print('Enumeration prediction')
+	entity_data, results = predict_enumerations(query, qtuples, results)
+	entity_fdict = defaultdict(int)
+	entity_conf = defaultdict(list)
+	for item in entity_data:
+		entity_fdict[item[1]] += 1
+		entity_conf[item[1]].append((item[2], item[0]))
+	entity_fdict = sorted(entity_fdict.items(), key=lambda x: x[1], reverse=True)
+	entity_conf = {k: sorted(v, key=lambda x: x[0], reverse=True)[0] for k, v in entity_conf.items()}
+	# entity_conf = [(k, v[0], []) for k, v in sorted(entity_conf.items(), key=lambda x: x[1][0])]
 	result['qtuples'] = {
 		'type': qtuples.type, 
 		'entity': ';'.join(qtuples.entity), 
 		'relation': qtuples.relation, 
 		'context': ';'.join(qtuples.context)
 	}
-	result['count_prediction'] = count_prediction
-	result['count_data'] = [{'cardinal': item[0], 'score': item[1], 'id': item[2]} for item in count_data]
-	result['count_annotations'] = count_annotations
-	# for doc in results_tags:
-	# 	ent_match = []
-	# 	integers = []
-	# 	text_cardinals = [{'text': ent.text, 'id': idx} for idx, ent in enumerate(doc.ents) if ent.label_ == 'CARDINAL']
-	# 	doc_json = doc.to_json()
-	# 	result['results_tags'].append({'text': doc_json['text'], 'ents': doc_json['ents']}) 
+	result['count'] = {
+		'prediction': count_prediction,
+		'dataitems_freq': ', '.join([str(int(k)) + ' (' + str(v) + ')' for k, v in count_data_fdict]),
+		'dataitems_sorted': ', '.join([str(int(item[0])) for item in count_data]),
+		'all_data': ', '.join([item[3] + ' [' + str(item[1]) + ', ' + str(item[2]+1) + ']' for item in count_data_fdict_all])
+	}
+	# result['count_annotations'] = count_annotations
+	result['entities'] = {
+		'entity_freq': ', '.join([k + ' (' + str(v) + ')' for k, v in entity_fdict]),
+		'entity_conf': ', '.join([k + ' [' + str(v[0]) + ', ' + str(v[1]+1) + ']' for k, v in sorted(entity_conf.items(), key=lambda x:x[1][0], reverse=True)]),
+		'all_entity_conf': ', '.join([e + ' [' + str(s) + ', ' + str(i+1) + ']' for i, e, s in entity_data])
+	}
+	result['annotations'] = results
 	return result

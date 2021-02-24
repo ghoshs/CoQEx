@@ -4,8 +4,6 @@ import sys
 import configparser
 import random
 from count_prediction.run_subprocess import run_subprocess
-## server edit
-# from run_subprocess import run_subprocess
 import re
 import os
 from tqdm import tqdm
@@ -13,10 +11,13 @@ from tqdm import tqdm
 # read api keys from config file
 config = configparser.ConfigParser()
 config.read('//nlcounqer/count_prediction/count_config.ini')
+### server edit
+# config.read('/nlcounqer/count_prediction/count_config_server.ini')
 
 CogCompPath = config['cogcomp']['CogCompPath']
 CogCompQuantifier = config['cogcomp']['Quantifier']
 NormalizeQuant = config['cogcomp']['Normalize']
+TmpDir = config['paths']['TmpDir']
 
 quant_pattern = re.compile(r"(\[[^\]]*\])\s*(\[[^\]]*\]):(\(\d+,\s\d+\))")
 ntuple_pattern = re.compile(r"\[(\S*)\s+(\d+(?:\.\d+)?)([Ee][+-]?\d+)?\s+(.*[^\s]?)\s*\]")
@@ -26,13 +27,13 @@ def structured_count(text, cogcomp_result, quant_pattern, ntuple_pattern):
 	empty_extraction = []
 
 	if len(cogcomp_result) == 0:
-		print("No extraction from: "+text)
+		# print("No extraction from: "+text)
 		return empty_extraction
 
 	all_patterns = re.findall(quant_pattern, cogcomp_result) ### [1] [2]:(3)
 
 	if len(all_patterns) == 0:		
-		print("No patterns fromm: "+text)
+		# print("No patterns fromm: "+text)
 		return empty_extraction
 	
 	# for pattern in all_patterns:
@@ -40,17 +41,17 @@ def structured_count(text, cogcomp_result, quant_pattern, ntuple_pattern):
 	all_ntuples = [ntuple[0] if len(ntuple)>0 else () for idx, ntuple in enumerate(all_ntuples)]
 	spans = [pattern[2] for pattern in all_patterns]
 	if len(all_ntuples) == 0:
-		print("No triples from: "+text+' : '+cogcomp_result)
+		# print("No triples from: "+text+' : '+cogcomp_result)
 		return empty_extraction
 	else:
 		extraction = list(zip(all_ntuples, spans))
-		print("Extracted: "+ str(extraction))
+		# print("Extracted: "+ str(extraction))
 		return extraction
 
 # return list of tuples
 def get_cogcomp_ntuples(snippet):
 	empty_extraction = []
-	tempfile = 'tmp' + '_' + str(random.random())[2:] + '.txt'
+	tempfile = TmpDir + 'tmp' + '_' + str(random.random())[2:] + '.txt'
 	with open(tempfile, 'w') as fp:
 		fp.write(snippet)
 	process_args = ['java', '-cp', CogCompPath, CogCompQuantifier, tempfile, NormalizeQuant]

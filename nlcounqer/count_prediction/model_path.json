@@ -9,7 +9,7 @@
 		}
 	},
 	"fine_tuned_coquad": {
-		"model_path": "./distilbert-base-uncased-coquad",
+		"model_path": "//nlcounqer/static/data/models/distilbert-base-uncased-coquad",
 		"thresholds": {
 			"max": 0.0,
 			"first": 0.0,
@@ -27,7 +27,7 @@
 		}
 	},
 	"fine_tuned_squad_coquad": {
-		"model_path": "./mrm8488_spanbert-finetuned-squadv2-coquad",
+		"model_path": "//nlcounqer/static/data/models/mrm8488_spanbert-finetuned-squadv2-coquad",
 		"thresholds": {
 			"max": 0.0,
 			"first": 0.0,
@@ -36,7 +36,7 @@
 		}
 	},
 	"default": {
-		"model_path": "./distilbert-base-uncased-coquad",
+		"model_path": "//nlcounqer/static/data/models/distilbert-base-uncased-coquad",
 		"thresholds": {
 			"max": 0.0,
 			"first": 0.0,

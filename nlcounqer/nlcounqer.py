@@ -13,16 +13,8 @@ try:
 except ImportError:
 	import urllib.request as myurllib
 
-
-# define paths
-cache_path = 'static/data/'
-tmp_path = './'
-
-
 # app graceful shutdown
 def signal_handler(signal, frame):
-	# shutdown bert server
-	server.shutdown(shut_args)
 	# remove tmp files
 	files = glob.glob(tmp_path+'tmp*/*', recursive=True)
 	folders = ['/'.join(file.split('/')[:-1]) for file in files]
@@ -39,7 +31,7 @@ def signal_handler(signal, frame):
 	# shut down server
 	sys.exit(0)
 
-signal.signal(signal.SIGINT, signal_handler)
+# signal.signal(signal.SIGINT, signal_handler)
 
 # flask app config
 app = Flask(__name__)
@@ -70,8 +62,12 @@ def free_text_query():
 	model = args['model'] if 'model' in args else None
 	aggregator = args['aggregator'] if 'aggregator' in args else None
 	
-	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n", (query, numsnippets, model, aggregator))
-	response = pipeline(query, numsnippets, model, aggregator) if len(query) > 0 else {}
+	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n"%(query, numsnippets, model, aggregator))
+	try:
+		response = pipeline(query, numsnippets, model, aggregator) if len(query) > 0 else {}
+	except Exception as e:
+		print(e)
+		response = {}
 	# pprint.pprint(response, width=160)
 	return jsonify(response)
 

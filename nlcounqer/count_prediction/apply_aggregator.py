@@ -4,24 +4,28 @@ def prepare_data(contexts, threshold):
 	cardinals = []
 	scores = []
 	ids = []
+	text = []
 	for context in contexts:
-		if 'cardinal' in context and context['cardinal'] is not None and context['answer']['score'] >= threshold:
+		if 'cardinal' in context and context['cardinal'] is not None and float(context['count_span']['score']) >= float(threshold):
 			cardinals.append(float(context['cardinal']))
-			scores.append(float(context['answer']['score']))
+			scores.append(round(float(context['count_span']['score']), 2))
 			ids.append(int(context['rank']))
-	data = list(zip(np.array(cardinals), np.array(scores), np.array(ids)))
-	return data
+			text.append(context['count_span']['text'])
+			context['count_span']['selected'] = True
+	data = list(zip(np.array(cardinals), np.array(scores), np.array(ids), np.array(text, dtype=object)))
+	return data, contexts
 
 
 def get_weighted_prediction(data):
-	ptile = 50
+	ptile_level = 50
 	if len(data) == 0:
 		return 	None, data
 	# cardinals, scores = np.array(cardinals), np.array(scores)
-	sorted_cardinals, sorted_scores, sorted_ids = map(np.array, zip(*sorted(data)))
+	sorted_cardinals, sorted_scores, sorted_ids, sorted_texts = map(np.array, zip(*sorted(data)))
 	half_score = (ptile_level/100.0) * sum(sorted_scores)
-	if any(scores > half_score):
-		median = (cardinals[scores == np.max(scores)])[0]
+	## in case of zero weights or single data
+	if any(sorted_scores > half_score):
+		median = (sorted_cardinals[sorted_scores == np.max(sorted_scores)])[0]
 	else:
 		cumsum_scores = np.cumsum(sorted_scores)
 		mid_idx = np.where(cumsum_scores <= half_score)[0][-1]
@@ -29,22 +33,25 @@ def get_weighted_prediction(data):
 			median = np.mean(sorted_cardinals[mid_idx:mid_idx+2])
 		else:
 			median = sorted_cardinals[mid_idx+1]
-	return median, list(zip(sorted_cardinals, sorted_scores, sorted_ids))
+	return int(median), list(zip(sorted_cardinals.tolist(), sorted_scores.tolist(), sorted_ids.tolist(), sorted_texts.tolist()))
 
 
 def get_median_prediction(data):
-	ptile = 50
+	ptile_level = 50
 	if len(data) == 0:
 		return None, data
 	else:
-		sorted_cardinals, sorted_scores, sorted_ids = map(np.array, zip(*sorted(data))) 		
+		sorted_cardinals, sorted_scores, sorted_ids, sorted_texts = map(np.array, zip(*sorted(data))) 		
 		median = np.percentile(sorted_cardinals, ptile_level, interpolation='higher')
-		return median, list(zip(sorted_cardinals, sorted_scores, sorted_ids))
+		return int(median), list(zip(sorted_cardinals.tolist(), sorted_scores.tolist(), sorted_ids.tolist(), sorted_texts.tolist()))
 	
 
 def apply_aggregator(contexts, aggregator, thresholds):
+	data, annotated_contexts = prepare_data(contexts, thresholds[aggregator])
 	if aggregator == 'weighted':
-		prediction, data = get_weighted_prediction(prepare_data(contexts, thresholds[aggregator]))
+		prediction, sorted_data = get_weighted_prediction(data)
 	elif aggregator == 'median':
-		prediction, data = get_median_prediction(prepare_data(contexts, thresholds[aggregator]))
-	return prediction, data
+		prediction, sorted_data = get_median_prediction(data)
+	else:
+		prediction, sorted_data = None, None
+	return prediction, sorted_data, annotated_contexts
