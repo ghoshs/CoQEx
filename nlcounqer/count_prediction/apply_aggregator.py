@@ -6,8 +6,8 @@ def prepare_data(contexts, threshold):
 	ids = []
 	text = []
 	for context in contexts:
-		if 'cardinal' in context and context['cardinal'] is not None and float(context['count_span']['score']) >= float(threshold):
-			cardinals.append(float(context['cardinal']))
+		if 'cardinal' in context and context['cardinal'] is not None and round(float(context['count_span']['score']),2) >= float(threshold) and int(context['cardinal'])>0:
+			cardinals.append(int(context['cardinal']))
 			scores.append(round(float(context['count_span']['score']), 2))
 			ids.append(int(context['rank']))
 			text.append(context['count_span']['text'])
