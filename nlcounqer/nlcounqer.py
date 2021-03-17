@@ -11,6 +11,8 @@ import spacy
 import configparser
 from pipeline import pipeline as nlcounqer_pipeline
 from retrieval.bing_search import call_bing_api
+from precomputed.precomputed_query import precomputed_query
+from precomputed.precomputed import precomputed_queries
 
 try: 
 	import urllib2 as myurllib
@@ -89,16 +91,20 @@ def free_text_query():
 	# check for optional arguments from aggregator calls
 	args_model = args['model'] if 'model' in args else None
 	aggregator = args['aggregator'] if 'aggregator' in args else None
+	staticquery = args['staticquery'] if 'staticquery' in args else 'live'
 	if not model or model != args_model:
 		model = args_model
 		tfmodel, thresholds, qa_enum, nlp = load_models(model)
 
 	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n"%(query, numsnippets, model, aggregator))
-	try:
-		response = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, numsnippets) if len(query) > 0 else {}
-	except Exception:
-		print(traceback.format_exc())
-		response = {}
+	if staticquery == 'precomputed' and precomputed_query(query):
+		response = precomputed_queries(query, tfmodel, thresholds, aggregator) if len(query) > 0 else {}
+	else:
+		try:
+			response = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, numsnippets) if len(query) > 0 else {}
+		except Exception:
+			print(traceback.format_exc())
+			response = {}
 	# pprint.pprint(response, width=160)
 	return jsonify(response)
 

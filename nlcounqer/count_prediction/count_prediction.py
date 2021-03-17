@@ -3,7 +3,15 @@ from count_prediction.myw2n import word_to_num
 from count_prediction.count_extraction import get_cogcomp_ntuples, get_count_spans
 from count_prediction.apply_aggregator import apply_aggregator
 
-def predict_count(query, contexts, tfmodel, thresholds, aggregator):
+def get_noun_phrase_w_count(nlp, context, answer, start):
+	ann = nlp(context)
+	for chunk in ann.noun_chunks:
+		if chunk.start_char <= start and chunk.end_char >= start+len(answer):
+			return chunk.start_char, chunk.end_char
+	return None, None
+
+
+def predict_count(query, contexts, tfmodel, thresholds, aggregator, nlp):
 	for item in contexts:
 		## 1. span prediction 
 		try:
@@ -13,6 +21,10 @@ def predict_count(query, contexts, tfmodel, thresholds, aggregator):
 		finally:
 			##2. Count extraction
 			item['count_span'] = {'text': answer['answer'], 'score': answer['score'], 'start': answer['start']}
+			np_start, np_end = get_noun_phrase_w_count(nlp, item['context'], answer['answer'], answer['start'])
+			if np_start is not None:
+				item['count_span']['np_start'] = np_start
+				item['count_span']['np_end'] = np_end
 			cardinal = None
 			try:
 				cardinal = word_to_num(item['count_span']['text'])

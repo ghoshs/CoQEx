@@ -12,7 +12,7 @@ from count_prediction.count_prediction import predict_count
 from enumeration_prediction.enumeration_prediction import predict_enumerations
 from interaction.interaction import boost_predictions
 
-def prepare_count_json(count_prediction, count_data):
+def prepare_count_json(count_prediction, count_data, **kwargs):
 	print('Count result to json')
 	# ticcj = time.perf_counter()
 	count_data_fdict = defaultdict(int)
@@ -26,15 +26,19 @@ def prepare_count_json(count_prediction, count_data):
 		'prediction': count_prediction,
 		# 'dataitems_freq': count_data_fdict,
 		# 'dataitems_sorted': count_data,
-		# 'all_data': count_data_fdict_all
+		'all_data': [[item[3], item[1], item[2]+1] for item in count_data_fdict_all],
 		'dataitems_freq': ', '.join([str(int(k)) + ' (' + str(v) + ')' for k, v in count_data_fdict]),
 		'dataitems_sorted': ', '.join([str(int(item[0])) for item in count_data]),
-		'all_data': ', '.join([item[3] + ' [' + str(item[1]) + ', ' + str(item[2]+1) + ']' for item in count_data_fdict_all])
+		# 'all_data': ', '.join([item[3] + ' [' + str(item[1]) + ', ' + str(item[2]+1) + ']' for item in count_data_fdict_all])
 	}
+	if 'old_data' in kwargs:
+		result['all_data'] = [[t, s, i+1, 0] if (c,s,i,t) in kwargs['old_data'] else [t, s, i+1, 1] for c,s,i,t in count_data_fdict_all]
+	else:
+		result['all_data'] = [[t, s, i+1] for c,s,i,t in count_data_fdict_all]
 	return result
 
 
-def prepare_enum_json(entity_data):
+def prepare_enum_json(entity_data, **kwargs):
 	print('Enumeration result to json')
 	# ticej = time.perf_counter()
 	entity_fdict = defaultdict(int)
@@ -49,12 +53,17 @@ def prepare_enum_json(entity_data):
 	# print("Completed in %.4f secs."%(toc - ticej))
 	result = {
 		# 'entity_freq': entity_fdict,
-		# 'entity_conf': sorted(entity_conf.items(), key=lambda x:x[1][0], reverse=True),
-		# 'all_entity_conf': entity_data
+		'entity_conf': [[k, v[0], v[1]+1] for k, v in sorted(entity_conf.items(), key=lambda x:x[1][0], reverse=True)],
+		# 'all_entity_conf': [[e, s, i+1] for i,e,s in entity_data],
 		'entity_freq': ', '.join([k + ' (' + str(v) + ')' for k, v in entity_fdict]),
-		'entity_conf': ', '.join([k + ' [' + str(v[0]) + ', ' + str(v[1]+1) + ']' for k, v in sorted(entity_conf.items(), key=lambda x:x[1][0], reverse=True)]),
-		'all_entity_conf': ', '.join([e + ' [' + str(s) + ', ' + str(i+1) + ']' for i, e, s in entity_data])
+		# 'entity_conf': ', '.join([k + ' [' + str(v[0]) + ', ' + str(v[1]+1) + ']' for k, v in sorted(entity_conf.items(), key=lambda x:x[1][0], reverse=True)]),
+		# 'all_entity_conf': ', '.join([e + ' [' + str(s) + ', ' + str(i+1) + ']' for i, e, s in entity_data])
 	}
+	if 'old_data' in kwargs:
+		# result['entity_conf'] = [[k, v[0], v[1]+1, 0] for k, v in sorted(entity_conf.items(), key=lambda x:x[1][0], reverse=True)],
+		result['all_entity_conf'] = [[e, s, i+1, 0] if (i,e,s) in kwargs['old_data'] else [e, s, i+1, 1] for i,e,s in entity_data]
+	else:
+		result['all_entity_conf'] = [[e, s, i+1] for i,e,s in entity_data]
 	return result
 
 
@@ -95,7 +104,7 @@ def pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, max_results=1
 	# 						dateLastCrawled,
 	# 						cardinal,
 	# 						count_span: dict(selected, text, score)))
-	count_prediction, count_data, results = predict_count(query, results, tfmodel, thresholds, aggregator)
+	count_prediction, count_data, results = predict_count(query, results, tfmodel, thresholds, aggregator, nlp)
 	toc = time.perf_counter()
 	print("Completed in %.4f secs."%(toc - ticc))
 	
@@ -131,9 +140,9 @@ def pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, max_results=1
 		'context': ';'.join(qtuples.context)
 	}
 	result['count'] = prepare_count_json(count_prediction, count_data) 
-	result['count_boost'] = prepare_count_json(count_prediction_boost, count_data_boost)
+	result['count_boost'] = prepare_count_json(count_prediction_boost, count_data_boost, old_data=count_data)
 	result['entities'] = prepare_enum_json(entity_data) 
-	result['entities_boost'] = prepare_enum_json(entity_data_boost)
+	result['entities_boost'] = prepare_enum_json(entity_data_boost, old_data=entity_data)
 	result['annotations'] = results
 
 	toc = time.perf_counter()
