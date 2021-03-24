@@ -3,8 +3,8 @@ import pprint
 from collections import defaultdict
 import time
 #### server edit
-# sys.path.append('/nlcounqer')
-sys.path.append('//nlcounqer')
+sys.path.append('/nlcounqer')
+# sys.path.append('//nlcounqer')
 
 from retrieval.bing_search import call_bing_api
 from query_model.query_model import get_qtuples

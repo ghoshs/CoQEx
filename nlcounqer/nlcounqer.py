@@ -11,7 +11,7 @@ import spacy
 import configparser
 from pipeline import pipeline as nlcounqer_pipeline
 from retrieval.bing_search import call_bing_api
-from precomputed.precomputed_query import precomputed_query
+from precomputed.query import is_precomputed, query_list
 from precomputed.precomputed import precomputed_queries
 
 try: 
@@ -78,6 +78,13 @@ def get_snippets():
 	# pprint.pprint(response, width=160)
 	return jsonify(response)
 
+## Endpoint for retrieving precomputed query list
+@app.route('/get_query_list', methods=['GET', 'POST'])
+@cross_origin()
+def get_query_list():
+	return jsonify(query_list())
+
+
 ## endpoint for 
 @app.route('/ftresults', methods=['GET', 'POST'])
 @cross_origin()
@@ -97,9 +104,11 @@ def free_text_query():
 		tfmodel, thresholds, qa_enum, nlp = load_models(model)
 
 	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n"%(query, numsnippets, model, aggregator))
-	if staticquery == 'precomputed' and precomputed_query(query):
+	if staticquery == 'precomputed' and is_precomputed(query):
+		print('precomputed!!')
 		response = precomputed_queries(query, tfmodel, thresholds, aggregator) if len(query) > 0 else {}
 	else:
+		print('Querying live!!')
 		try:
 			response = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, numsnippets) if len(query) > 0 else {}
 		except Exception:
