@@ -148,9 +148,10 @@ def prepare_count_json(count_prediction, count_data, **kwargs):
 		'prediction': count_prediction,
 		'all_data': [[item[3], item[1], item[2]+1] for item in count_data_fdict_all],
 		'dataitems_freq': ', '.join([str(int(k)) + ' (' + str(v) + ')' for k, v in count_data_fdict]),
-		'dataitems_sorted': ', '.join([str(int(item[0])) for item in count_data]),
+		'dataitems_sorted': ', '.join([str(int(item[0])) for item in sorted(count_data)]),
 	}
 	if 'old_data' in kwargs:
+		# keep track of boosted data points.
 		result['all_data'] = [[t, s, i+1, 0] if (c,s,i,t) in kwargs['old_data'] else [t, s, i+1, 1] for c,s,i,t in count_data_fdict_all]
 	else:
 		result['all_data'] = [[t, s, i+1] for c,s,i,t in count_data_fdict_all]
@@ -170,10 +171,11 @@ def prepare_enum_json(entity_data, **kwargs):
 		'entity_conf': [[k, v[0], v[1]+1] for k, v in sorted(entity_conf.items(), key=lambda x:x[1][0], reverse=True)],
 		'entity_freq': ', '.join([k + ' (' + str(v) + ')' for k, v in entity_fdict]),
 	}
+	all_entity_conf = sorted(entity_data, key=lambda x:x[2], reverse=True)
 	if 'old_data' in kwargs:
-		result['all_entity_conf'] = [[e, s, i+1, 0] if (i,e,s) in kwargs['old_data'] else [e, s, i+1, 1] for i,e,s in entity_data]
+		result['all_entity_conf'] = [[e, s, i+1, 0] if (i,e,s) in kwargs['old_data'] else [e, s, i+1, 1] for i,e,s in all_entity_conf]
 	else:
-		result['all_entity_conf'] = [[e, s, i+1] for i,e,s in entity_data]
+		result['all_entity_conf'] = [[e, s, i+1] for i,e,s in all_entity_conf]
 	return result
 
 
