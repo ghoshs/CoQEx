@@ -2,6 +2,9 @@ import json
 from count_prediction.myw2n import word_to_num
 from count_prediction.count_extraction import get_cogcomp_ntuples, get_count_spans
 from count_prediction.apply_aggregator import apply_aggregator
+import os
+from os import path
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 def get_noun_phrase_w_count(nlp, context, answer, start):
 	ann = nlp(context)
