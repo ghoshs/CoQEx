@@ -55,11 +55,15 @@ def number_formation(number_words):
     for number_word in number_words:
         if number_word.isdigit():
             numbers.append(int(number_word))
+        elif number_word.replace('.','',1).isdigit():
+            numbers.append(float(number_word))
         else:
             numbers.append(american_number_system[number_word])
     if len(numbers) == 4:
-        return (numbers[0] * numbers[1]) + numbers[2] + numbers[3]
+        # four hundred forty nine
+        return numbers[0] * numbers[1] + numbers[2] + numbers[3]
     elif len(numbers) == 3:
+        # four hundred eleven
         return numbers[0] * numbers[1] + numbers[2]
     elif len(numbers) == 2:
         # if 100 in numbers:
@@ -124,9 +128,14 @@ def word_to_num(number_sentence):
     clean_numbers = []
     clean_decimal_numbers = []
 
+    # check for words separating two different numbers
+    seperators = ['or']
     # removing and, & etc.
     for word in split_words:
-        if word in american_number_system or word.isdigit():
+        if not word.replace('.','',1).isdigit():
+            # for eg. 20.0.1
+            raise ValueError("Two decimal points found!!")
+        if word in american_number_system or word.isdigit() or word.replace('.','',1).isdigit():
             clean_numbers.append(word)
 
     # Error message if the user enters invalid input!
