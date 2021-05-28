@@ -134,7 +134,8 @@ def word_to_num(number_sentence):
     for word in split_words:
         if not word.replace('.','',1).isdigit():
             # for eg. 20.0.1
-            raise ValueError("Two decimal points found!!")
+            err = "Two decimal points found in " + str(word) + "!!"
+            raise ValueError()
         if word in american_number_system or word.isdigit() or word.replace('.','',1).isdigit():
             clean_numbers.append(word)
 
