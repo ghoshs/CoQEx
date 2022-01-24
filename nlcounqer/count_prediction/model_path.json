@@ -1,47 +1,18 @@
 {
 	"base_model": {
-		"model_path": "distilbert-base-uncased", 
-		"thresholds": {
-			"max": 0.0,
-			"first": 0.0,
-			"weighted": 0.0,
-			"median": 0.0
-		}
+		"model_path": "SpanBERT/spanbert-base-cased", 
+		"thresholds": 0.5
 	},
 	"fine_tuned_coquad": {
-		"model_path": "//nlcounqer/static/data/models/distilbert-base-uncased-coquad",
-		"thresholds": {
-			"max": 0.0,
-			"first": 0.0,
-			"weighted": 0.0,
-			"median": 0.2
-		}
+		"model_path": "//nlcounqer/static/data/models/Spanbert/spanbert-bert-cased/0",
+		"thresholds": 0.5
 	}, 
 	"fine_tuned_squad":	{
 		"model_path": "mrm8488/spanbert-finetuned-squadv2",
-		"thresholds": {
-			"max": 0.0,
-			"first": 0.0,
-			"weighted": 0.0,
-			"median": 0.1
-		}
-	},
-	"fine_tuned_squad_coquad": {
-		"model_path": "//nlcounqer/static/data/models/mrm8488_spanbert-finetuned-squadv2-coquad",
-		"thresholds": {
-			"max": 0.0,
-			"first": 0.0,
-			"weighted": 0.0,
-			"median": 0.6
-		}
+		"thresholds": 0.5
 	},
 	"default": {
-		"model_path": "//nlcounqer/static/data/models/distilbert-base-uncased-coquad",
-		"thresholds": {
-			"max": 0.0,
-			"first": 0.0,
-			"weighted": 0.0,
-			"median": 0.2
-		}
+		"model_path": "//nlcounqer/static/data/models/Spanbert/spanbert-bert-cased/0",
+		"thresholds": 0.5
 	}
 }
