@@ -99,8 +99,8 @@ def free_text_query():
 	numsnippets = args['snippets'] 
 	
 	# check for optional arguments from aggregator calls
-	args_model = args['model'] if 'model' in args else None
-	aggregator = args['aggregator'] if 'aggregator' in args else None
+	args_model = args['model'] if 'model' in args else 'default'
+	aggregator = args['aggregator'] if 'aggregator' in args else 'weighted'
 	staticquery = args['staticquery'] if 'staticquery' in args else 'live'
 	if not model or model != args_model:
 		model = args_model

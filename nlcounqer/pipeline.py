@@ -127,11 +127,11 @@ def pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, max_results):
 	print("Completed in %.4f secs."%(toc - tice))
 	
 	### 5. Interaction
-	print('Interaction ')
-	tici = time.perf_counter()
-	count_prediction_boost, count_data_boost, entity_data_boost = boost_predictions(count_prediction, count_data, aggregator, entity_data)
-	toc = time.perf_counter()
-	print("Completed in %.4f secs."%(toc - tice))
+	# print('Interaction ')
+	# tici = time.perf_counter()
+	# count_prediction_boost, count_data_boost, entity_data_boost = boost_predictions(count_prediction, count_data, aggregator, entity_data)
+	# toc = time.perf_counter()
+	# print("Completed in %.4f secs."%(toc - tice))
 
 	result['qtuples'] = {
 		'type': qtuples.type, 
@@ -140,11 +140,11 @@ def pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, max_results):
 		'context': ';'.join(qtuples.context)
 	}
 	result['count'] = prepare_count_json(count_prediction, count_data) 
-	result['count_boost'] = prepare_count_json(count_prediction_boost, count_data_boost, old_data=count_data)
+	# result['count_boost'] = prepare_count_json(count_prediction_boost, count_data_boost, old_data=count_data)
 	result['entities'] = prepare_enum_json(entity_data) 
-	result['entities_boost'] = prepare_enum_json(entity_data_boost, old_data=entity_data)
+	# result['entities_boost'] = prepare_enum_json(entity_data_boost, old_data=entity_data)
 	result['annotations'] = results
 
 	toc = time.perf_counter()
-	print('Total time leapsed %.4f secs'%(toc-ticq))
+	print('Total time lapsed %.4f secs'%(toc-ticq))
 	return result, toc - ticq
