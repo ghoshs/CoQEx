@@ -41,24 +41,27 @@ def signal_handler(signal, frame):
 
 # signal.signal(signal.SIGINT, signal_handler)
 def load_models(model):
-	config = configparser.ConfigParser()
 	### count models
+	count_config = configparser.ConfigParser()
+	# count_config.read('//nlcounqer/count_prediction/count_config.ini')
 	## server edit ##
-	# config.read('/nlcounqer/count_prediction/count_config_server.ini')
-	config.read('//nlcounqer/count_prediction/count_config.ini')
-	model_path_dict = json.load(open(config['paths']['ModelPath'], 'r'))
+	count_config.read('/nlcounqer/count_prediction/count_config_server.ini')
+	
+	model_path_dict = json.load(open(count_config['paths']['ModelPath'], 'r'))
 	model_path = model_path_dict[model]['model_path']
 	thresholds = model_path_dict[model]['thresholds']
 	qa_count = pipeline("question-answering", model_path)
-	## enum models
-	nlp = spacy.load("en_core_web_sm")
-	# nlp = stanza.Pipeline('en',dir='/home/shrestha/stanza_resources')
+	
+	### enum models
+	enum_config = configparser.ConfigParser()
+	# enum_config.read('//nlcounqer/enumeration_prediction/enum_config.ini')
 	## server edit ##
-	# nlp = stanza.Pipeline('en', dir='/root/stanza_resources')
-	# model = AutoModelForQuestionAnswering.from_pretrained('mrm8488/spanbert-finetuned-squadv2', cache_dir='/.cache/huggingface/transformers/')
-	# tokenizer = AutoTokenizer.from_pretrained('mrm8488/spanbert-finetuned-squadv2', cache_dir='/.cache/huggingface/transformers/')
-	# qa_enum = pipeline('question-answering', model=model, tokenizer=tokenizer)
-	qa_enum = pipeline('question-answering', 'mrm8488/spanbert-finetuned-squadv2')
+	enum_config.read('/nlcounqer/enumeration_prediction/enum_config_server.ini')
+
+	nlp = spacy.load(enum_config['nlp']['Language'])
+	model = AutoModelForQuestionAnswering.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
+	tokenizer = AutoTokenizer.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
+	qa_enum = pipeline('question-answering', model=model, tokenizer=tokenizer)
 	return qa_count, thresholds, qa_enum, nlp
 	
 
@@ -106,14 +109,20 @@ def free_text_query():
 	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n"%(query, numsnippets, model, aggregator))
 	if staticquery == 'precomputed' and is_precomputed(query):
 		print('precomputed!!')
-		response = precomputed_queries(query, tfmodel, thresholds, aggregator) if len(query) > 0 else {}
+		# return response and time elapsed in seconds
+		if len(query) > 0:
+			response, time_elapsed = precomputed_queries(query, tfmodel, thresholds, aggregator)
+		else:
+			response, time_elapsed = {}, 0.0
 	else:
 		print('Querying live!!')
 		try:
-			response = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, numsnippets) if len(query) > 0 else {}
+			response, time_elapsed = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, numsnippets) if len(query) > 0 else {}
 		except Exception:
 			print(traceback.format_exc())
-			response = {}
+			response, time_elapsed = {}, 0.0
+	response['q'] = query
+	response['time_in_sec'] = time_elapsed 
 	# pprint.pprint(response, width=160)
 	return jsonify(response)
 
