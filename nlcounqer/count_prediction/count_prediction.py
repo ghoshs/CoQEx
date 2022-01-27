@@ -24,7 +24,8 @@ def predict_count(query, contexts, tfmodel, thresholds, aggregator, nlp):
 		finally:
 			##2. Count extraction
 			item['count_span'] = {'text': answer['answer'], 'score': answer['score'], 'start': answer['start']}
-			np_start, np_end = get_noun_phrase_w_count(nlp, item['context'], answer['answer'], answer['start'])
+			np_start, np_end = answer['start'], answer['start']+len(answer['answer'])
+			# np_start, np_end = get_noun_phrase_w_count(nlp, item['context'], answer['answer'], answer['start'])
 			if np_start is not None:
 				item['count_span']['np_start'] = np_start
 				item['count_span']['np_end'] = np_end
