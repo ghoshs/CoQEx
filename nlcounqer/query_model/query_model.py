@@ -44,8 +44,7 @@ class ContextToken(object):
 class QueryModel(object):
 	def __init__(self, query: str, model: str):
 		self.query = query
-		self.model = model
-		self.nlp = spacy.load(self.model)
+		self.nlp = model
 
 	def query_processing(self):
 		entity_classes = ['person', 'norp', 'fac', 'org', 'gpe', 'loc', 'product', 'event', 'work_of_art', 'law', 'language']
@@ -119,7 +118,7 @@ class QueryModel(object):
 		self.context = tuple(word.token.text for word in context) 
 
 
-def get_qtuples(query, model='en_core_web_sm'):
+def get_qtuples(query, model):
 	query_model = QueryModel(query, model)
 	query_model.query_processing()
 	QTuples = namedtuple('QTuples', 'type entity relation context')
