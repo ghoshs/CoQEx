@@ -3,8 +3,8 @@ import pprint
 from collections import defaultdict
 import time
 #### server edit
-# sys.path.append('/nlcounqer')
-sys.path.append('//nlcounqer')
+sys.path.append('/nlcounqer')
+# sys.path.append('//nlcounqer')
 
 from retrieval.bing_search import call_bing_api
 from query_model.query_model import get_qtuples
@@ -67,13 +67,13 @@ def prepare_enum_json(entity_data, **kwargs):
 	return result
 
 
-def pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, max_results=10):
+def pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, max_results):
 	result = {}
 	
 	### 1. Query modeling: namedtuple QTuples('type', 'entity', 'relation' 'context')
 	print('Getting query tuples')
 	ticq = time.perf_counter()
-	qtuples = get_qtuples(query, 'en_core_web_sm')
+	qtuples = get_qtuples(query, nlp)
 	toc = time.perf_counter()
 	print("Completed in %.4f secs."%(toc - ticq))
 	
@@ -147,4 +147,4 @@ def pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, max_results=1
 
 	toc = time.perf_counter()
 	print('Total time leapsed %.4f secs'%(toc-ticq))
-	return result
+	return result, toc - ticq
