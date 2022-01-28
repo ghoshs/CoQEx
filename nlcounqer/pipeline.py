@@ -18,23 +18,16 @@ def prepare_count_json(count_prediction, count_data, **kwargs):
 	count_data_fdict = defaultdict(int)
 	for num, score, id, text in count_data:
 		count_data_fdict[num] += 1
-	count_data_fdict = sorted(count_data_fdict.items(), key=lambda x:x[1], reverse=True)
+	# count_data_fdict = sorted(count_data_fdict.items(), key=lambda x:x[1], reverse=True)
 	count_data_fdict_all = sorted(count_data, key=lambda x: x[1], reverse=True)	
 	# toc = time.perf_counter()
 	# print("Completed in %.4f secs."%(toc - ticcj))
 	result = {
 		'prediction': count_prediction,
-		# 'dataitems_freq': count_data_fdict,
-		# 'dataitems_sorted': count_data,
-		'all_data': [[item[3], item[1], item[2]+1] for item in count_data_fdict_all],
-		'dataitems_freq': ', '.join([str(int(k)) + ' (' + str(v) + ')' for k, v in count_data_fdict]),
-		'dataitems_sorted': ', '.join([str(int(item[0])) for item in count_data]),
-		# 'all_data': ', '.join([item[3] + ' [' + str(item[1]) + ', ' + str(item[2]+1) + ']' for item in count_data_fdict_all])
+		'all_data': [[item[3], item[1], item[2]+1, item[0], count_data_fdict[item[0]]] for item in count_data_fdict_all],
+		# 'dataitems_freq': ', '.join([str(int(k)) + ' (' + str(v) + ')' for k, v in count_data_fdict]),
+		# 'dataitems_sorted': ', '.join([str(int(item[0])) for item in count_data])
 	}
-	if 'old_data' in kwargs:
-		result['all_data'] = [[t, s, i+1, 0] if (c,s,i,t) in kwargs['old_data'] else [t, s, i+1, 1] for c,s,i,t in count_data_fdict_all]
-	else:
-		result['all_data'] = [[t, s, i+1] for c,s,i,t in count_data_fdict_all]
 	return result
 
 

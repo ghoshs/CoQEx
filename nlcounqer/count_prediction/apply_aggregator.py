@@ -79,10 +79,10 @@ def apply_aggregator(contexts, aggregator, thresholds):
 		prediction, sorted_data = get_weighted_prediction(data)
 	elif aggregator == 'median':
 		prediction, sorted_data = get_median_prediction(data)
-	elif aggregator == 'max':
-		prediction, sorted_data = get_max_prediction(data)
-	elif aggregator == 'frequent':
-		prediction, sorted_data = get_frequent_prediction(data)
+	# elif aggregator == 'max':
+	# 	prediction, sorted_data = get_max_prediction(data)
+	# elif aggregator == 'frequent':
+	# 	prediction, sorted_data = get_frequent_prediction(data)
 	else:
 		prediction, sorted_data = None, None
 	return prediction, sorted_data, annotated_contexts
