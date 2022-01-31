@@ -19,14 +19,12 @@ def prepare_count_json(count_prediction, count_data, **kwargs):
 	for num, score, id, text in count_data:
 		count_data_fdict[num] += 1
 	# count_data_fdict = sorted(count_data_fdict.items(), key=lambda x:x[1], reverse=True)
-	count_data_fdict_all = sorted(count_data, key=lambda x: x[1], reverse=True)	
+	# count_data_fdict_all = sorted(count_data, key=lambda x: x[1], reverse=True)	
 	# toc = time.perf_counter()
 	# print("Completed in %.4f secs."%(toc - ticcj))
 	result = {
 		'prediction': count_prediction,
-		'all_data': [[item[3], item[1], item[2]+1, item[0], count_data_fdict[item[0]]] for item in count_data_fdict_all],
-		# 'dataitems_freq': ', '.join([str(int(k)) + ' (' + str(v) + ')' for k, v in count_data_fdict]),
-		# 'dataitems_sorted': ', '.join([str(int(item[0])) for item in count_data])
+		'all_count': [[item[3], round(item[1],2), item[2]+1, item[0], count_data_fdict[item[0]]] for item in count_data],
 	}
 	return result
 
@@ -38,25 +36,16 @@ def prepare_enum_json(entity_data, **kwargs):
 	entity_conf = defaultdict(list)
 	for item in entity_data:
 		entity_fdict[item[1]] += 1
-		entity_conf[item[1]].append((item[2], item[0]))
-	entity_fdict = sorted(entity_fdict.items(), key=lambda x: x[1], reverse=True)
-	# entity_conf = {'entity_label': (score, id)}
-	entity_conf = {k: sorted(v, key=lambda x: x[0], reverse=True)[0] for k, v in entity_conf.items()}
+		# entity_conf[item[1]].append((item[4], item[0]))
+	# entity_fdict = sorted(entity_fdict.items(), key=lambda x: x[1], reverse=True)
+	# entity_conf = {k: sorted(v, key=lambda x: x[0], reverse=True)[0] for k, v in entity_conf.items()}
 	# toc = time.perf_counter()
 	# print("Completed in %.4f secs."%(toc - ticej))
 	result = {
-		# 'entity_freq': entity_fdict,
-		'entity_conf': [[k, v[0], v[1]+1] for k, v in sorted(entity_conf.items(), key=lambda x:x[1][0], reverse=True)],
 		# 'all_entity_conf': [[e, s, i+1] for i,e,s in entity_data],
-		'entity_freq': ', '.join([k + ' (' + str(v) + ')' for k, v in entity_fdict]),
-		# 'entity_conf': ', '.join([k + ' [' + str(v[0]) + ', ' + str(v[1]+1) + ']' for k, v in sorted(entity_conf.items(), key=lambda x:x[1][0], reverse=True)]),
-		# 'all_entity_conf': ', '.join([e + ' [' + str(s) + ', ' + str(i+1) + ']' for i, e, s in entity_data])
+		# 'entity_freq': ', '.join([k + ' (' + str(v) + ')' for k, v in entity_fdict]),
+		'all_entity': [[entity, round(score,2), _id+1, start, round(conf,2), entity_fdict[entity]] for _id,entity,conf,start,score in entity_data]
 	}
-	if 'old_data' in kwargs:
-		# result['entity_conf'] = [[k, v[0], v[1]+1, 0] for k, v in sorted(entity_conf.items(), key=lambda x:x[1][0], reverse=True)],
-		result['all_entity_conf'] = [[e, s, i+1, 0] if (i,e,s) in kwargs['old_data'] else [e, s, i+1, 1] for i,e,s in entity_data]
-	else:
-		result['all_entity_conf'] = [[e, s, i+1] for i,e,s in entity_data]
 	return result
 
 
