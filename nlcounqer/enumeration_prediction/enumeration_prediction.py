@@ -38,7 +38,7 @@ def get_entities_stanford_nlp(contexts, predictions, qtuples, nlp):
 			for mention in mentions:
 				entity_startchar = mention.start_char
 				entity = { 
-						  'score': round(answer['score'], 2), 
+						  'score': round(float(answer['score']), 2), 
 						  'start': answer['start'] + entity_startchar,
 						  'answer': answer['answer']
 						 }
@@ -67,7 +67,7 @@ def get_entities_spacy(contexts, predictions, qtuples, nlp):
 			for mention in mentions:
 				entity_startchar = mention.start_char
 				entity = { 
-						  'score': round(answer['score'],2), 
+						  'score': round(float(answer['score']),2), 
 						  'start': answer['start'] + entity_startchar,
 						  'answer': answer['answer'],
 						  'entity': mention.text
