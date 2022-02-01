@@ -1,6 +1,5 @@
 from flask import Flask, render_template, url_for, json, request, jsonify, send_from_directory
 from flask_cors import CORS, cross_origin
-from transformers import pipeline, AutoModelForQuestionAnswering, AutoTokenizer
 import json
 import pprint
 import signal
@@ -9,6 +8,10 @@ import glob
 import traceback
 import spacy
 import configparser
+os.environ['TRANSFORMERS_CACHE'] = '/.cache/huggingface/transformers/'
+from transformers import pipeline, AutoModelForQuestionAnswering, AutoTokenizer
+# Download model beforehand -> set proxies on the terminal beforehand (export http-proxy.. )
+# load model from_pretrained with cache_dir passed
 from pipeline import pipeline as nlcounqer_pipeline
 from retrieval.bing_search import call_bing_api
 from precomputed.query import is_precomputed, query_list
@@ -20,6 +23,13 @@ except ImportError:
 	import urllib.request as myurllib
 
 model=tfmodel=thresholds=qa_enum=nlp=None
+
+proxies = {
+
+
+
+
+}
 
 # app graceful shutdown
 def signal_handler(signal, frame):
@@ -59,9 +69,11 @@ def load_models(model):
 	enum_config.read('/nlcounqer/enumeration_prediction/enum_config_server.ini')
 
 	nlp = spacy.load(enum_config['nlp']['Language'])
+	print('transformers cache: ', os.environ['TRANSFORMERS_CACHE'])
+	tokenizer = AutoTokenizer.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'], local_files_only=True)
 	model = AutoModelForQuestionAnswering.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
-	tokenizer = AutoTokenizer.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
 	qa_enum = pipeline('question-answering', model=model, tokenizer=tokenizer)
+	# qa_enum = pipeline('question-answering', enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
 	return qa_count, thresholds, qa_enum, nlp
 	
 
