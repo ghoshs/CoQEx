@@ -10,6 +10,7 @@ import spacy
 import configparser
 os.environ['TRANSFORMERS_CACHE'] = '/.cache/huggingface/transformers/'
 from transformers import pipeline, AutoModelForQuestionAnswering, AutoTokenizer
+from sentence_transformers import SentenceTransformer
 # Download model beforehand -> set proxies on the terminal beforehand (export http-proxy.. )
 # load model from_pretrained with cache_dir passed
 from pipeline import pipeline as nlcounqer_pipeline
@@ -74,7 +75,10 @@ def load_models(model):
 	model = AutoModelForQuestionAnswering.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
 	qa_enum = pipeline('question-answering', model=model, tokenizer=tokenizer)
 	# qa_enum = pipeline('question-answering', enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
-	return qa_count, thresholds, qa_enum, nlp
+	
+	## load sbert for count contextualization
+	sbert = SentenceTransformer(count_config['sbert']['SentBERTModel']) 
+	return qa_count, thresholds, qa_enum, nlp, sbert
 	
 
 # flask app config
@@ -116,7 +120,7 @@ def free_text_query():
 	staticquery = args['staticquery'] if 'staticquery' in args else 'live'
 	if not model or model != args_model:
 		model = args_model
-		tfmodel, thresholds, qa_enum, nlp = load_models(model)
+		tfmodel, thresholds, qa_enum, nlp, sbert = load_models(model)
 
 	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n"%(query, numsnippets, model, aggregator))
 	if staticquery == 'precomputed' and is_precomputed(query):
@@ -129,7 +133,7 @@ def free_text_query():
 	else:
 		print('Querying live!!')
 		try:
-			response, time_elapsed = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, aggregator, numsnippets) if len(query) > 0 else {}
+			response, time_elapsed = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, numsnippets) if len(query) > 0 else {}
 		except Exception:
 			print(traceback.format_exc())
 			response, time_elapsed = {}, 0.0

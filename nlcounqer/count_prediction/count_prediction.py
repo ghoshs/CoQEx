@@ -2,10 +2,12 @@ import json
 from count_prediction.myw2n import word_to_num
 from count_prediction.count_extraction import get_cogcomp_ntuples, get_count_spans
 from count_prediction.apply_aggregator import apply_aggregator
+from count_prediction.count_contextualization import count_contextualization
 import os
 from os import path
 import time
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 
 def get_noun_phrase_w_count(nlp, context, answer, start):
 	ann = nlp(context)
@@ -15,10 +17,24 @@ def get_noun_phrase_w_count(nlp, context, answer, start):
 	return None, None
 
 
-def predict_count(query, contexts, tfmodel, thresholds, aggregator, nlp):
+def predict_count(query, contexts, tfmodel, thresholds, aggregator, nlp, sbert):
+	"""
+		Returns the following variables
+		prediction -> int
+		sorted_data -> list(tuple(cardinal, score, id, text, context_class))
+		annotated_contexts -> list(dict(
+							rank,
+							url,
+							about,
+							context,
+							dateLastCrawled,
+							cardinal,
+							count_span: dict(selected, text, score, context_class)))
+	"""
 	time_elapsed_prediction = 0
 	time_elapsed_extraction = 0
 	time_elapsed_aggregation = 0
+	time_elapsed_contextualization = 0
 	for item in contexts:
 		## 1. span prediction 
 		try:
@@ -52,5 +68,12 @@ def predict_count(query, contexts, tfmodel, thresholds, aggregator, nlp):
 	tic = time.perf_counter()
 	prediction, sorted_data, annotated_contexts = apply_aggregator(contexts, aggregator, thresholds)
 	time_elapsed_aggregation += time.perf_counter() - tic
-	print('Prediction took %.4f secs\nExtraction took %.4f secs\nAggregation took %.4f secs'%(time_elapsed_prediction, time_elapsed_extraction, time_elapsed_aggregation))
+
+	##4. Classify Count Contexts
+	tic = time.perf_counter()
+	sorted_data, annotated_contexts = count_contextualization(sbert, prediction, sorted_data, annotated_contexts)
+	time_elapsed_contextualization = time.perf_counter() - tic
+
+	print('Prediction took %.4f secs\nExtraction took %.4f secs\nAggregation took %.4f secs\nContextualization took %.4f secs'%\
+		(time_elapsed_prediction, time_elapsed_extraction, time_elapsed_aggregation, time_elapsed_contextualization))
 	return prediction, sorted_data, annotated_contexts
