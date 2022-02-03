@@ -137,7 +137,7 @@ def free_text_query():
 			print(traceback.format_exc())
 			response, time_elapsed = {}, 0.0
 	response['q'] = query
-	response['time_in_sec'] = time_elapsed 
+	response['time_in_sec'] = round(time_elapsed,2) 
 	# pprint.pprint(response, width=160)
 	return jsonify(response)
 
