@@ -13,7 +13,7 @@ def get_model_predictions(qa, query, contexts, topk):
 		if query.startswith('How many ') or query.startswith('how many '):
 			query = 'Which ' + query[len('how many '):]
 		try:
-			answer = qa(question=query, context=item['context'], topk=topk)
+			answer = qa(question=query, context=item['context'], top_k=topk)
 		except:
 			answer = []
 		finally:
