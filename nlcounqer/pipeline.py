@@ -18,10 +18,6 @@ def prepare_count_json(count_prediction, count_data, **kwargs):
 	count_data_fdict = defaultdict(int)
 	for num, score, id, text, cnp_class in count_data:
 		count_data_fdict[num] += 1
-	# count_data_fdict = sorted(count_data_fdict.items(), key=lambda x:x[1], reverse=True)
-	# count_data_fdict_all = sorted(count_data, key=lambda x: x[1], reverse=True)	
-	# toc = time.perf_counter()
-	# print("Completed in %.4f secs."%(toc - ticcj))
 	result = {
 		'prediction': count_prediction,
 		'all_count': [[item[3], round(item[1],2), item[2]+1, item[0], count_data_fdict[item[0]], item[4]] for item in count_data],
@@ -110,9 +106,7 @@ def pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, max_re
 		'context': ';'.join(qtuples.context)
 	}
 	result['count'] = prepare_count_json(count_prediction, count_data) 
-	# result['count_boost'] = prepare_count_json(count_prediction_boost, count_data_boost, old_data=count_data)
 	result['entities'] = prepare_enum_json(entity_data) 
-	# result['entities_boost'] = prepare_enum_json(entity_data_boost, old_data=entity_data)
 	result['annotations'] = results
 
 	toc = time.perf_counter()

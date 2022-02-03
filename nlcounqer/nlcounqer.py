@@ -70,7 +70,6 @@ def load_models(model):
 	enum_config.read('/nlcounqer/enumeration_prediction/enum_config_server.ini')
 
 	nlp = spacy.load(enum_config['nlp']['Language'])
-	print('transformers cache: ', os.environ['TRANSFORMERS_CACHE'])
 	tokenizer = AutoTokenizer.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'], local_files_only=True)
 	model = AutoModelForQuestionAnswering.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
 	qa_enum = pipeline('question-answering', model=model, tokenizer=tokenizer)

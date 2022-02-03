@@ -48,11 +48,11 @@ def get_cnp_classes(sbert, cnp_rep, cnps_group1, cnps_group2, prediction, cutoff
 				unrelated.append(cnps_group2[i])
 	sorted_data = [(cnp_rep[0], cnp_rep[1], cnp_rep[2], cnp_rep[3], 'cnprep')]
 	for cardinal, score, _id, text in equivalent:
-		sorted_data.append((cardinal, score, _id, text, 'equivalent'))
+		sorted_data.append((cardinal, score, _id, text, 'synonym'))
 	for cardinal, score, _id, text in subgroup:
 		sorted_data.append((cardinal, score, _id, text, 'subgroup'))
 	for cardinal, score, _id, text in unrelated:
-		sorted_data.append((cardinal, score, _id, text, 'unrelated'))
+		sorted_data.append((cardinal, score, _id, text, 'incomparable'))
 	return sorted_data
 
 
