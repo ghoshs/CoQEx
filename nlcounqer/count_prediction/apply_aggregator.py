@@ -16,7 +16,6 @@ def prepare_data(contexts, threshold):
 			context['count_span']['selected'] = True
 			context['count_span']['score'] = round(float(context['count_span']['score']),2)
 		elif 'cardinal' in context and context['cardinal'] is not None:
-			text.append(context['count_span']['text'])
 			context['count_span']['selected'] = False
 			context['count_span']['score'] = round(float(context['count_span']['score']),2)
 	data = list(zip(np.array(cardinals), np.array(scores), np.array(ids), np.array(text, dtype=object)))
