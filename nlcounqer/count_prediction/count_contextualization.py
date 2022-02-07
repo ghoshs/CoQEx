@@ -6,53 +6,58 @@ def get_cnp_groups(prediction, sorted_data):
 		group1: cnps with count == prediction
 		group2: other cnps
 	"""
-	group1, group2 = [], []
+	cnp_rep, group1, group2 = None, [], []
 	for cardinal, score, _id, text in sorted_data:
 		if int(cardinal) == int(prediction):
 			group1.append((cardinal, score, _id, text))
 		else:
 			group2.append((cardinal, score, _id, text))
-	group1 = sorted(group1, key=lambda x: float(x[1]), reverse=True)
-	return group1[0], group1[1:], group2 
+	if len(group1)>0:
+		group1 = sorted(group1, key=lambda x: float(x[1]), reverse=True)
+		cnp_rep = group1[0]
+		group1 = group1[1:] if len(group1)>1 else []
+	return cnp_rep, group1, group2 
 
 
 def get_cnp_classes(sbert, cnp_rep, cnps_group1, cnps_group2, prediction, cutoff=0.3):
 	equivalent = []
 	unrelated = []
 	subgroup = []
-	if len(cnps_group1) > 0:
-		embedding_equivalent = sbert.encode([cnp_rep[3].lower()],convert_to_tensor=True)
-		embeddings_group1 = sbert.encode([text.lower() for cardinal, score, _id, text in cnps_group1],convert_to_tensor=True)
-		cosine_scores = util.pytorch_cos_sim(embedding_equivalent, embeddings_group1)
-		for i in range(len(cnps_group1)):
-			if cosine_scores[0][i] > 0:
-				equivalent.append(cnps_group1[i])
-			else:
-				unrelated.append(cnps_group1[i])
-	if len(cnps_group2) > 0:
-		embedding_equivalent = sbert.encode([cnp_rep[3].lower()], convert_to_tensor=True)
-		embeddings_group2 = sbert.encode([text.lower() for cardinal, score, _id, text in cnps_group2],convert_to_tensor=True)
-		cosine_scores = util.pytorch_cos_sim(embedding_equivalent, embeddings_group2)
-		for i in range(len(cnps_group2)):
-			if cosine_scores[0][i] > 0:
-				range_low = int((1-cutoff)*float(prediction))
-				range_high = int((1+cutoff)*float(prediction))
-				cardinal = int(cnps_group2[i][0])
-				if cardinal >= range_low and cardinal <= range_high:
-					equivalent.append(cnps_group2[i])
-				elif cardinal < prediction:
-					subgroup.append(cnps_group2[i])
+	sorted_data = []
+	if cnp_rep is not None:
+		if len(cnps_group1) > 0:
+			embedding_equivalent = sbert.encode([cnp_rep[3].lower()],convert_to_tensor=True)
+			embeddings_group1 = sbert.encode([text.lower() for cardinal, score, _id, text in cnps_group1],convert_to_tensor=True)
+			cosine_scores = util.pytorch_cos_sim(embedding_equivalent, embeddings_group1)
+			for i in range(len(cnps_group1)):
+				if cosine_scores[0][i] > 0:
+					equivalent.append(cnps_group1[i])
+				else:
+					unrelated.append(cnps_group1[i])
+		if len(cnps_group2) > 0:
+			embedding_equivalent = sbert.encode([cnp_rep[3].lower()], convert_to_tensor=True)
+			embeddings_group2 = sbert.encode([text.lower() for cardinal, score, _id, text in cnps_group2],convert_to_tensor=True)
+			cosine_scores = util.pytorch_cos_sim(embedding_equivalent, embeddings_group2)
+			for i in range(len(cnps_group2)):
+				if cosine_scores[0][i] > 0:
+					range_low = int((1-cutoff)*float(prediction))
+					range_high = int((1+cutoff)*float(prediction))
+					cardinal = int(cnps_group2[i][0])
+					if cardinal >= range_low and cardinal <= range_high:
+						equivalent.append(cnps_group2[i])
+					elif cardinal < prediction:
+						subgroup.append(cnps_group2[i])
+					else:
+						unrelated.append(cnps_group2[i])
 				else:
 					unrelated.append(cnps_group2[i])
-			else:
-				unrelated.append(cnps_group2[i])
-	sorted_data = [(cnp_rep[0], cnp_rep[1], cnp_rep[2], cnp_rep[3], 'cnprep')]
-	for cardinal, score, _id, text in equivalent:
-		sorted_data.append((cardinal, score, _id, text, 'synonym'))
-	for cardinal, score, _id, text in subgroup:
-		sorted_data.append((cardinal, score, _id, text, 'subgroup'))
-	for cardinal, score, _id, text in unrelated:
-		sorted_data.append((cardinal, score, _id, text, 'incomparable'))
+		sorted_data = [(cnp_rep[0], cnp_rep[1], cnp_rep[2], cnp_rep[3], 'cnprep')]
+		for cardinal, score, _id, text in equivalent:
+			sorted_data.append((cardinal, score, _id, text, 'synonym'))
+		for cardinal, score, _id, text in subgroup:
+			sorted_data.append((cardinal, score, _id, text, 'subgroup'))
+		for cardinal, score, _id, text in unrelated:
+			sorted_data.append((cardinal, score, _id, text, 'incomparable'))
 	return sorted_data
 
 
