@@ -1,56 +1,40 @@
 import pandas as pd
-from precomputed.query import precomputed_query_type, precomputed_query_id
+from precomputed.query import precomputed_query_type, precomputed_query_id, file_maps
+from query_model.query_model import QTuples
 import ast
 import json
+import time
 from collections import defaultdict
 
-path = '//nlcounqer/'
-## server edit ##
-# path = '/nlcounqer/'
 
-file_maps = {
-	'query': {
-		'coquad': path + 'static/data/queries/coquad_v1/test_ntuples.csv',
-		'stresstest': path + '/static/data/queries/stresstest_v1/stresstest_ntuples.csv'
-	},
-	'snippets_bing': {
-		'coquad': path + 'static/data/snippets/coquad_v1/test_v1.json',
-		'stresstest': path + 'static/data/snippets/stresstest_v1/stresstest_v1.json'
-	},
-	'snippets_wikip': {
-		'coquad': path + 'static/data/snippets/coquad_v1/test_dpr_retrieed_top50_v1.json',
-		'stresstest': path + 'static/data/snippets/stresstest_v1/stresstest_dpr_retrieed_top50_v1.json'
-	},
-	'counts_inverse': {
-		'coquad': path + 'static/data/count_info/coquad_v1/bing/weighted_0.0_boosted_inverse.csv',
-		'stresstest': path + 'static/data/count_info/stresstest_v1/bing/weighted_0.0_boosted_inverse.csv'
-	},
-	'enums_inverse': {
-		'coquad': path + 'static/data/count_info/coquad_v1/bing/reranked_binary.csv',
-		'stresstest': path + 'static/data/count_info/stresstest_v1/bing/reranked_binary.csv'
-	}
-}
+# path = '//nlcounqer/'
+## server edit ##
+path = '/nlcounqer/'
+
+"""
+return precomputed results on CoQuAD using CoQEx
+"""
 
 def get_qtuples(qtype, qid):
-	qtuples = {}
 	query_df = pd.read_csv(file_maps['query'][qtype])
-	tuples = query_df.loc[query_df['qid']==qid, ['answer_type','query_entity','relation','context']].to_dict('records')[0]
-	if not pd.isnull(tuples['context']):
-		qtuples['context'] = ast.literal_eval(tuples['context'])
-		qtuples['context'] = ';'.join(qtuples['context'])
+	tuples = query_df.loc[query_df['qid']==qid, ['answer_type','query_entity','query_relation','query_context']].to_dict('records')[0]
+	if not pd.isnull(tuples['query_context']):
+		context = ast.literal_eval(tuples['query_context'])
+		context = tuple(word for word in context)
 	else:
-		qtuples['context'] = ''
-	if not pd.isnull(tuples['relation']):
-		qtuples['relation'] = tuples['relation']
+		context = ''
+	if not pd.isnull(tuples['query_relation']):
+		relation = tuples['query_relation']
 	else:
-		qtuples['relation'] = ''
+		relation = ''
 	if not pd.isnull(tuples['answer_type']):
-		qtuples['type'] = tuples['answer_type']
+		_type = tuples['answer_type']
 	else:
-		qtuples['type'] = ''
+		_type = ''
 	if not pd.isnull(tuples['query_entity']):
-		qtuples['entity'] = ast.literal_eval(tuples['query_entity'])
-		qtuples['entity'] = ';'.join(qtuples['entity'])
+		entity = ast.literal_eval(tuples['query_entity'])
+		entity = tuple(ent for ent in entity)
+	qtuples = QTuples(type=_type, entity=entity, relation=relation, context=context)
 	return qtuples
 
 
@@ -63,18 +47,18 @@ def get_contexts(qtype, qid, source='bing'):
 			cid = int(para['qas'][0]['id'].split('_')[1])
 			if qid != _qid:
 				continue
-			contexts.append({'context': para['context'], 'rank': cid})
+			contexts.append({'context': para['context'], 'rank': cid, 'qid': para['qas'][0]['id']})
 	return contexts
 
 
-def get_entity_results(qtype, qid, contexts):
+def get_entity_results(qtype, qid, contexts, **kwargs):
 	entity_df = pd.read_csv(file_maps['enums_inverse'][qtype])
 	entity_tuples = []  ## list(tuple(id, entity, score))
 	entity_tuples_boost = []
 	for item in contexts:
 		entities = []
 		cid = item['rank']
-		enums = entity_df.loc[((entity_df['qid'] == qid) & (entity_df['cid'] == cid)), ['answer', 'entity', 'score', 'score_boost']].to_dict('records')
+		enums = entity_df.loc[((entity_df['qid'] == qid) & (entity_df['cid'] == cid)), cols].to_dict('records')
 		for enum in enums:
 			if enum['answer'] not in item['context']:
 				continue
@@ -82,12 +66,12 @@ def get_entity_results(qtype, qid, contexts):
 			entity['start'] = item['context'].index(enum['answer']) + enum['answer'].index(enum['entity'])
 			entities.append(entity)
 			entity_tuples.append((cid, enum['entity'], enum['score']))
-			entity_tuples_boost.append((cid, enum['entity'], enum['score_boost']))
+			# entity_tuples_boost.append((cid, enum['entity'], enum['score_boost']))
 		item['entities'] = entities
-	return entity_tuples, entity_tuples_boost, contexts
+	return entity_tuples, contexts
 
 
-def get_count_results(qtype, qid, contexts):
+def get_count_results(qtype, qid, contexts, **kwargs):
 	count_df = pd.read_csv(file_maps['counts_inverse'][qtype])
 	count_tuples = [] ## list(tuple(cardinal, score, id, text))
 	count_tuples_boost = []
@@ -95,7 +79,7 @@ def get_count_results(qtype, qid, contexts):
 	count_data_boost = []
 	cardinals = [] ## list[tuple(cardinal, score)]
 	cardinals_boost = []
-	counts = count_df.loc[count_df['qid']==qid, ['tf_answer', 'cardinals', 'prediction', 'new_tf_answer', 'new_cardinals', 'new_prediction']].to_dict('records')
+	counts = count_df.loc[count_df['qid']==qid, cols].to_dict('records')
 	try:
 		count_tuples = ast.literal_eval(counts[0]['tf_answer'])
 		cardinals = ast.literal_eval(counts[0]['cardinals'])
@@ -104,18 +88,18 @@ def get_count_results(qtype, qid, contexts):
 	finally:		
 		count_tuples = [(item[3], round(item[1],2), int(item[0]), item[2]) for item in count_tuples] 
 		cardinals = [(item[0], round(item[1],2)) for item in cardinals]
-	try: 
-		count_tuples_boost = ast.literal_eval(counts[0]['new_tf_answer'])
-		cardinals_boost = ast.literal_eval(counts[0]['new_cardinals'])
-	except:
-		pass
-	finally:
-		count_tuples_boost = [(item[3], round(item[1],2), int(item[0]), item[2]) for item in count_tuples_boost] 
-		cardinals_boost = [(item[0], round(item[1],2)) for item in cardinals_boost]
+	# try: 
+	# 	count_tuples_boost = ast.literal_eval(counts[0]['new_tf_answer'])
+	# 	cardinals_boost = ast.literal_eval(counts[0]['new_cardinals'])
+	# except:
+	# 	pass
+	# finally:
+	# 	count_tuples_boost = [(item[3], round(item[1],2), int(item[0]), item[2]) for item in count_tuples_boost] 
+	# 	cardinals_boost = [(item[0], round(item[1],2)) for item in cardinals_boost]
 
 	print('count_tuples: ', count_tuples)
 	prediction = None if len(count_tuples) == 0 else counts[0]['prediction']
-	prediction_boost = None if len(count_tuples_boost) == 0 else counts[0]['new_prediction']
+	# prediction_boost = None if len(count_tuples_boost) == 0 else counts[0]['new_prediction']
 	for item in contexts:
 		cid = item['rank']
 		count_span = {'text': '', 'start': 0, 'score': 0.0}
@@ -131,10 +115,10 @@ def get_count_results(qtype, qid, contexts):
 					count_span['selected'] = True
 		item['count_span'] = count_span
 		item['cardinal'] = cardinal
-		for count in count_tuples_boost:
-			if count[2] == cid and (count[0], count[1]) in cardinals_boost:
-				count_data_boost.append(count)
-	return prediction, count_data, prediction_boost, count_data_boost, contexts
+		# for count in count_tuples_boost:
+		# 	if count[2] == cid and (count[0], count[1]) in cardinals_boost:
+		# 		count_data_boost.append(count)
+	return prediction, count_data, contexts
 
 
 def prepare_count_json(count_prediction, count_data, **kwargs):
@@ -181,20 +165,46 @@ def prepare_enum_json(entity_data, **kwargs):
 
 def precomputed_queries(query, tfmodel, thresholds, aggregator):
 	result = {}
+	ticq = time.perf_counter()
 	qtype = precomputed_query_type(query)
 	print('Query type: ', qtype)
 	qid = precomputed_query_id(query)
+	
 	print('Query ID: qid = ', qid)
 	result['qtuples'] = get_qtuples(qtype, qid)
+	
 	print('Getting contexts .. ')
 	contexts = get_contexts(qtype, qid)
+	
 	print('Getting enumerations .. ')
-	entity_data, entity_data_boost, contexts = get_entity_results(qtype, qid, contexts)
+	# enum_cols = ['answer', 'entity', 'score', 'score_boost']
+	# entity_data, entity_data_boost, contexts = get_entity_results(qtype, qid, contexts)
+	enum_cols = {'answer': 'answer', 'entity': 'entity', 'score': 'score'}
+	entity_data, contexts = get_entity_results(qtype, qid, contexts, cols=enum_cols)
+	
 	print('Getting counts .. ')
-	prediction, count_data, prediction_boost, count_data_boost, contexts = get_count_results(qtype, qid, contexts)
+	# count_cols = ['tf_answer', 'cardinals', 'prediction', 'new_tf_answer', 'new_cardinals', 'new_prediction']
+	# prediction, count_data, prediction_boost, count_data_boost, contexts = get_count_results(qtype, qid, contexts)
+	count_cols = {'tf_answer': 'tf_answer', 'cardinals': 'cardinals', 'prediction': 'prediction'}
+	prediction, count_data, contexts = get_count_results(qtype, qid, contexts, cols=count_cols)
+	
 	result['count'] = prepare_count_json(prediction, count_data) 
-	result['count_boost'] = prepare_count_json(prediction_boost, count_data_boost, old_data=count_data)
+	# result['count_boost'] = prepare_count_json(prediction_boost, count_data_boost, old_data=count_data)
 	result['entities'] = prepare_enum_json(entity_data) 
-	result['entities_boost'] = prepare_enum_json(entity_data_boost, old_data=entity_data)
+	# result['entities_boost'] = prepare_enum_json(entity_data_boost, old_data=entity_data)
 	result['annotations'] = contexts
-	return result
+	toc = time.perf_counter()
+	return result, toc - ticq
+
+def prefetched_contexts(query):
+	ticq = time.perf_counter()
+	qtype = precomputed_query_type(query)
+	print('Query type: ', qtype)
+	qid = precomputed_query_id(query)
+
+	print('Query ID: qid = ', qid)
+	qtuples = get_qtuples(qtype, qid)
+	
+	print('Getting contexts .. ')
+	contexts = get_contexts(qtype, qid)
+	return contexts, qtuples

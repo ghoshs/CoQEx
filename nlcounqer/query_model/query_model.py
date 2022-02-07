@@ -5,6 +5,7 @@ from tqdm import tqdm
 from inflection import singularize
 from collections import namedtuple
 
+QTuples = namedtuple('QTuples', 'type entity relation context')
 
 class Entity(object):
 	def __init__(self, span: Span):
@@ -121,7 +122,6 @@ class QueryModel(object):
 def get_qtuples(query, model):
 	query_model = QueryModel(query, model)
 	query_model.query_processing()
-	QTuples = namedtuple('QTuples', 'type entity relation context')
 	qtuples = QTuples(type=query_model.type, 
 					  entity=query_model.entity,
 					  relation=query_model.relation,

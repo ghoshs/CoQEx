@@ -45,13 +45,16 @@ def prepare_enum_json(entity_data, **kwargs):
 	return result
 
 
-def pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, max_results):
+def pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, max_results, **kwargs):
 	result = {}
 	
 	### 1. Query modeling: namedtuple QTuples('type', 'entity', 'relation' 'context')
 	print('Getting query tuples')
 	ticq = time.perf_counter()
-	qtuples = get_qtuples(query, nlp)
+	if 'qtuples' in kwargs:
+		qtuples = kwargs['qtuples']
+	else:
+		qtuples = get_qtuples(query, nlp)
 	print("Completed in %.4f secs."%(time.perf_counter() - ticq))
 	
 	### 2. Document retrieval (Bing/Wikipedia): JSON 
@@ -63,7 +66,10 @@ def pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, max_re
 	# 						about,
 	# 						context,
 	# 						dateLastCrawled))
-	results = call_bing_api(query, max_results)
+	if 'contexts' in kwargs:
+		results = kwargs['contexts']
+	else:
+		results = call_bing_api(query, max_results)
 	print("Completed in %.4f secs."%(time.perf_counter() - ticr))
 	
 	### 3. Count predictions

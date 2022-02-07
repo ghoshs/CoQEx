@@ -16,14 +16,14 @@ from sentence_transformers import SentenceTransformer
 from pipeline import pipeline as nlcounqer_pipeline
 from retrieval.bing_search import call_bing_api
 from precomputed.query import is_precomputed, query_list
-from precomputed.precomputed import precomputed_queries
+from precomputed.precomputed import precomputed_queries, prefetched_contexts
 
 try: 
 	import urllib2 as myurllib
 except ImportError:
 	import urllib.request as myurllib
 
-model=tfmodel=thresholds=qa_enum=nlp=None
+model=tfmodel=thresholds=qa_enum=nlp=sbert=None
 
 proxies = {
 
@@ -96,6 +96,7 @@ def get_snippets():
 	# pprint.pprint(response, width=160)
 	return jsonify(response)
 
+
 ## Endpoint for retrieving precomputed query list
 @app.route('/get_query_list', methods=['GET', 'POST'])
 @cross_origin()
@@ -107,7 +108,7 @@ def get_query_list():
 @app.route('/ftresults', methods=['GET', 'POST'])
 @cross_origin()
 def free_text_query():
-	global model, tfmodel, thresholds, qa_enum, nlp
+	global model, tfmodel, thresholds, qa_enum, nlp, sbert
 	# query parsing for ajax call
 	args = request.args
 	query = args['query']
@@ -117,25 +118,31 @@ def free_text_query():
 	args_model = args['model'] if 'model' in args else 'default'
 	aggregator = args['aggregator'] if 'aggregator' in args else 'weighted'
 	staticquery = args['staticquery'] if 'staticquery' in args else 'live'
-	if not model or model != args_model:
+	if not model or model != args_model or not sbert:
 		model = args_model
 		tfmodel, thresholds, qa_enum, nlp, sbert = load_models(model)
 
 	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n"%(query, numsnippets, model, aggregator))
-	if staticquery == 'precomputed' and is_precomputed(query):
-		print('precomputed!!')
+	if staticquery == 'prefetched' and is_precomputed(query):
+		print('prefetched!!')
 		# return response and time elapsed in seconds
 		if len(query) > 0:
-			response, time_elapsed = precomputed_queries(query, tfmodel, thresholds, aggregator)
+			contexts, qtuples = prefetched_contexts(query)
+			response, time_elapsed = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, numsnippets, contexts=contexts, qtuples=qtuples)
 		else:
 			response, time_elapsed = {}, 0.0
 	else:
 		print('Querying live!!')
-		try:
-			response, time_elapsed = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, numsnippets) if len(query) > 0 else {}
-		except Exception:
-			print(traceback.format_exc())
+		if len(query) > 0:
+			try:
+				response, time_elapsed = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, numsnippets)
+			except Exception:
+				print(traceback.format_exc())
+				response, time_elapsed = {}, 0.0
+		else:
 			response, time_elapsed = {}, 0.0
+	print('Response type:', type(response))
+	print()
 	response['q'] = query
 	response['time_in_sec'] = round(time_elapsed,2) 
 	# pprint.pprint(response, width=160)
