@@ -141,8 +141,6 @@ def free_text_query():
 				response, time_elapsed = {}, 0.0
 		else:
 			response, time_elapsed = {}, 0.0
-	print('Response type:', type(response))
-	print()
 	response['q'] = query
 	response['time_in_sec'] = round(time_elapsed,2) 
 	# pprint.pprint(response, width=160)
