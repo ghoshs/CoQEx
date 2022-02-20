@@ -38,7 +38,7 @@ def get_qtuples(qtype, qid):
 	return qtuples
 
 
-def get_contexts(qtype, qid, source='bing'):
+def get_contexts(qtype, qid, query='', source='bing'):
 	contexts = []
 	with open(file_maps['snippets_'+source][qtype]) as fp:
 		data = json.load(fp)
@@ -206,5 +206,5 @@ def prefetched_contexts(query):
 	qtuples = get_qtuples(qtype, qid)
 	
 	print('Getting contexts .. ')
-	contexts = get_contexts(qtype, qid)
+	contexts = get_contexts(qtype, qid, query)
 	return contexts, qtuples
