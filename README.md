@@ -1,6 +1,6 @@
 # CoQEx
 Data for SIGIR paper
-------------------
+
 ### Folder Description
 
 `./dataset` : contains:
@@ -8,7 +8,7 @@ Data for SIGIR paper
 	2. `coquad_annotated/`: the CoQUAD manually annotated queries and count contexts
 	3. `lcquad_v2/`: LCQuAD v2 count query set 
 
--------------------
+
 
 Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
 
