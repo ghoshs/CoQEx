@@ -1,6 +1,14 @@
 # CoQEx
 Data for SIGIR paper
+------------------
+### Folder Description
 
+`./dataset` : contains:
+	1. `coquad_v1/`: the CoQuAD dataset coquadv1 (automatically annotated data) consisting snippets in `json` files. Each snippet is an individual object with query and an identifier in the format <query_id><segment_id>. Queries are in the `queries/` folder.
+	2. `coquad_annotated/`: the CoQUAD manually annotated queries and count contexts
+	3. `lcquad_v2/`: LCQuAD v2 count query set 
+
+-------------------
 
 Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
 
