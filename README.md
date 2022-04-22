@@ -9,7 +9,7 @@ Data for SIGIR paper
 	3. `lcquad_v2/`: LCQuAD v2 count query set 
 
 
-More information on the methodology is available on our paper [here][https://arxiv.org/pdf/2204.05039.pdf].
+More information on the methodology is available on our paper (<https://arxiv.org/pdf/2204.05039.pdf>).
 
 Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
 
