@@ -34,6 +34,7 @@ A pipeline for executing CoQEx coming up soon.
 
 If you use our work please cite us:
 
+```bibtex
 @inproceedings{ghosh2022answering,
     title = "Answering Count Queries with Explanatory Evidence",
     author = "Shrestha Ghosh and Simon Razniewski and Gerhard Weikum",
@@ -41,6 +42,7 @@ If you use our work please cite us:
     month = jul,
     year = "2022",
 }
+```
 
 More information on the methodology is available on our paper (<https://arxiv.org/pdf/2204.05039.pdf>).
 
