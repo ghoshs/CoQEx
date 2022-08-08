@@ -10,7 +10,6 @@ from retrieval.bing_search import call_bing_api
 from query_model.query_model import get_qtuples
 from count_prediction.count_prediction import predict_count
 from enumeration_prediction.enumeration_prediction import predict_enumerations
-from interaction.interaction import boost_predictions
 
 def prepare_count_json(count_prediction, count_data, **kwargs):
 	print('Count result to json')
@@ -20,7 +19,7 @@ def prepare_count_json(count_prediction, count_data, **kwargs):
 		count_data_fdict[num] += 1
 	result = {
 		'prediction': count_prediction,
-		'all_count': [[item[3], round(item[1],2), item[2]+1, item[0], count_data_fdict[item[0]], item[4]] for item in count_data],
+		'all_count': [[item[3], round(item[1],2), item[2]+1, item[0], count_data_fdict[item[0]], item[4]] for item in count_data]
 	}
 	return result
 
@@ -28,24 +27,32 @@ def prepare_count_json(count_prediction, count_data, **kwargs):
 def prepare_enum_json(entity_data, **kwargs):
 	print('Enumeration result to json')
 	# ticej = time.perf_counter()
-	entity_fdict = defaultdict(int)
-	entity_conf = defaultdict(list)
-	for item in entity_data:
-		entity_fdict[item[1]] += 1
-		# entity_conf[item[1]].append((item[4], item[0]))
-	# entity_fdict = sorted(entity_fdict.items(), key=lambda x: x[1], reverse=True)
-	# entity_conf = {k: sorted(v, key=lambda x: x[0], reverse=True)[0] for k, v in entity_conf.items()}
-	# toc = time.perf_counter()
-	# print("Completed in %.4f secs."%(toc - ticej))
-	result = {
-		# 'all_entity_conf': [[e, s, i+1] for i,e,s in entity_data],
-		# 'entity_freq': ', '.join([k + ' (' + str(v) + ')' for k, v in entity_fdict]),
-		'all_entity': [[entity, round(score,2), _id+1, start, round(conf,2), entity_fdict[entity]] for _id,entity,conf,start,score in entity_data]
-	}
+	# entity_fdict = defaultdict(int)
+	# entity_conf = defaultdict(list)
+	# for item in entity_data:
+	# 	entity_fdict[item[1]] += 1
+	result = {'all_entity': []}
+	for canon_entity in entity_data:
+		for cid, entity, start, answer, conf, entailment in entity_data[canon_entity]['ann']:
+			result['all_entity'].append([entity, 
+				canon_entity,
+				cid+1,
+				start,
+				round(conf,2), round(entailment,2), 
+				round(entity_data[canon_entity]['type_compatibility_score'],2),
+				round(entity_data[canon_entity]['answer_confidence_score'],2),
+				round(entity_data[canon_entity]['context_frequency_score'],2),
+				round(entity_data[canon_entity]['winning_document_score'],2),
+				])
+	# result = {
+	# 	# 'all_entity_conf': [[e, s, i+1] for i,e,s in entity_data],
+	# 	# 'entity_freq': ', '.join([k + ' (' + str(v) + ')' for k, v in entity_fdict]),
+	# 	'all_entity': [[entity, round(score,2), _id+1, start, round(conf,2), entity_fdict[entity]] for _id,entity,conf,start,score in entity_data]
+	# }
 	return result
 
 
-def pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, max_results, **kwargs):
+def pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, max_results, **kwargs):
 	result = {}
 	
 	### 1. Query modeling: namedtuple QTuples('type', 'entity', 'relation' 'context')
@@ -85,13 +92,22 @@ def pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, max_re
 	# 						dateLastCrawled,
 	# 						cardinal,
 	# 						count_span: dict(selected, text, score, context_class)))
-	count_prediction, count_data, results = predict_count(query, results, tfmodel, thresholds, aggregator, nlp, sbert)
+	count_prediction, count_data, results = predict_count(query, results, tfmodel, count_thresholds, aggregator, nlp, sbert)
 	print("Completed in %.4f secs."%(time.perf_counter() - ticc))
 
 	### 4. Enumeration predction
 	print('Enumeration prediction')
 	tice = time.perf_counter()
-	## entity_data -> list(tuple(id, entity, score))
+	## entity_data -> dict(
+	# 						canon_entity: 
+	# 						dict(
+	# 							ann: tuple(cid, entity, start, answer, conf, entailment),
+	# 							type_compatibility_score: float,
+	# 							answer_confidence_score: float,
+	# 							context_frequency_score: float,
+	# 							winning_document_score: float
+	# 					  	)
+	# 				  )
 	## results -> list(dict(
 	# 						rank,
 	# 						url,
@@ -99,10 +115,10 @@ def pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, max_re
 	# 						context,
 	# 						dateLastCrawled,
 	# 						cardinal,
-	# 						count_span: dict(selected, text, score)
+	# 						count_span: dict(selected, text, score, context_class)
 	# 						entities: dict(entity_text: 
-	# 										dict(score, start, answer))))
-	entity_data, results = predict_enumerations(query, qtuples, results, qa_enum, nlp)
+	# 										dict(selected, score, start, answer, entity, canonical))))
+	entity_data, results = predict_enumerations(query, qtuples, results, qa_enum, nlp, typepredictor, span_threshold=enum_threshold)
 	print("Completed in %.4f secs."%(time.perf_counter() - tice))
 	
 	result['qtuples'] = {
@@ -111,6 +127,18 @@ def pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, max_re
 		'relation': qtuples.relation, 
 		'context': ';'.join(qtuples.context)
 	}
+	## result['count'] -> dict(
+	# 						'prediction': float,
+	# 						'all_count': list(list(
+	# 										[text, score, id+1, cardinal, cardinal_frequency, context_class]
+	# 									 ))
+	# 					  )
+	## result['entities'] -> dict('all_entity': list(list(
+	# 								[entity, canon_entity, 
+	# 								id, start, 
+	# 								confidence, entailment, 
+	# 								typecom_score, ansconf_score, freq_score, windoc_score]
+	# 							  )))
 	result['count'] = prepare_count_json(count_prediction, count_data) 
 	result['entities'] = prepare_enum_json(entity_data) 
 	result['annotations'] = results

@@ -10,9 +10,9 @@ from tqdm import tqdm
 
 # read api keys from config file
 config = configparser.ConfigParser()
-config.read('//nlcounqer/count_prediction/count_config.ini')
+# config.read('//nlcounqer/count_prediction/count_config.ini')
 ### server edit
-# config.read('/nlcounqer/count_prediction/count_config_server.ini')
+config.read('/nlcounqer/count_prediction/count_config_server.ini')
 
 CogCompPath = config['cogcomp']['CogCompPath']
 CogCompQuantifier = config['cogcomp']['Quantifier']

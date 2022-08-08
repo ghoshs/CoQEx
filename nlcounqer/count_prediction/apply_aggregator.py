@@ -2,6 +2,8 @@ import numpy as np
 from collections import Counter
 import random
 
+PERCENTILE_LEVEL = 50
+
 def prepare_data(contexts, threshold):
 	cardinals = []
 	scores = []
@@ -23,12 +25,11 @@ def prepare_data(contexts, threshold):
 
 
 def get_weighted_prediction(data):
-	ptile_level = 50
 	if len(data) == 0:
 		return 	None, data
 	# cardinals, scores = np.array(cardinals), np.array(scores)
 	sorted_cardinals, sorted_scores, sorted_ids, sorted_texts = map(np.array, zip(*sorted(data)))
-	half_score = (ptile_level/100.0) * sum(sorted_scores)
+	half_score = (PERCENTILE_LEVEL/100.0) * sum(sorted_scores)
 	## in case of zero weights or single data
 	if any(sorted_scores > half_score):
 		median = (sorted_cardinals[sorted_scores == np.max(sorted_scores)])[0]
@@ -44,12 +45,11 @@ def get_weighted_prediction(data):
 
 
 def get_median_prediction(data):
-	ptile_level = 50
 	if len(data) == 0:
 		return None, data
 	else:
 		sorted_cardinals, sorted_scores, sorted_ids, sorted_texts = map(np.array, zip(*sorted(data))) 		
-		median = np.percentile(sorted_cardinals, ptile_level, interpolation='higher')
+		median = np.percentile(sorted_cardinals, PERCENTILE_LEVEL, interpolation='higher')
 		return int(median), list(zip(sorted_cardinals.tolist(), 
 				sorted_scores.tolist(), sorted_ids.tolist(), sorted_texts.tolist()))
 
@@ -84,10 +84,12 @@ def apply_aggregator(contexts, aggregator, thresholds):
 		print('Sorted data: ', sorted_data)
 	elif aggregator == 'median':
 		prediction, sorted_data = get_median_prediction(data)
-	# elif aggregator == 'max':
-	# 	prediction, sorted_data = get_max_prediction(data)
-	# elif aggregator == 'frequent':
-	# 	prediction, sorted_data = get_frequent_prediction(data)
+		print('Prediction: ', prediction)
+		print('Sorted data: ', sorted_data)
+	elif aggregator == 'max':
+		prediction, sorted_data = get_max_prediction(data)
+	elif aggregator == 'frequent':
+		prediction, sorted_data = get_frequent_prediction(data)
 	else:
 		prediction, sorted_data = None, None
 	return prediction, sorted_data, annotated_contexts

@@ -8,7 +8,11 @@ import glob
 import traceback
 import spacy
 import configparser
+# set cache directories before loading the predictor module
+print('cache root before setting env var: ',os.getenv('ALLENNLP_CACHE_ROOT'))
+
 os.environ['TRANSFORMERS_CACHE'] = '/.cache/huggingface/transformers/'
+
 from transformers import pipeline, AutoModelForQuestionAnswering, AutoTokenizer
 from sentence_transformers import SentenceTransformer
 # Download model beforehand -> set proxies on the terminal beforehand (export http-proxy.. )
@@ -17,13 +21,17 @@ from pipeline import pipeline as nlcounqer_pipeline
 from retrieval.bing_search import call_bing_api
 from precomputed.query import is_precomputed, query_list
 from precomputed.precomputed import precomputed_queries, prefetched_contexts
+print('cache root before loading: ',os.getenv('ALLENNLP_CACHE_ROOT'))
+
+
+## to-do: implement max live queries = 100 per / day; maybe display counter on the website
 
 try: 
 	import urllib2 as myurllib
 except ImportError:
 	import urllib.request as myurllib
 
-model=tfmodel=thresholds=qa_enum=nlp=sbert=None
+model=tfmodel=count_thresholds=qa_enum=enum_threshold=typepredictor=nlp=sbert=None
 
 proxies = {
 
@@ -31,6 +39,8 @@ proxies = {
 
 
 }
+
+
 
 # app graceful shutdown
 def signal_handler(signal, frame):
@@ -60,7 +70,7 @@ def load_models(model):
 	
 	model_path_dict = json.load(open(count_config['paths']['ModelPath'], 'r'))
 	model_path = model_path_dict[model]['model_path']
-	thresholds = model_path_dict[model]['thresholds']
+	count_thresholds = model_path_dict[model]['thresholds']
 	qa_count = pipeline("question-answering", model_path)
 	
 	### enum models
@@ -73,11 +83,15 @@ def load_models(model):
 	tokenizer = AutoTokenizer.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'], local_files_only=True)
 	model = AutoModelForQuestionAnswering.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
 	qa_enum = pipeline('question-answering', model=model, tokenizer=tokenizer)
-	# qa_enum = pipeline('question-answering', enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
-	
+	enum_threshold = float(enum_config['span']['threshold'])
+
+	typepredictor = enum_config['typeprediction']['model']
+	typepredictor = load_predictor(typepredictor)
+
 	## load sbert for count contextualization
 	sbert = SentenceTransformer(count_config['sbert']['SentBERTModel']) 
-	return qa_count, thresholds, qa_enum, nlp, sbert
+
+	return qa_count, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert
 	
 
 # flask app config
@@ -108,7 +122,7 @@ def get_query_list():
 @app.route('/ftresults', methods=['GET', 'POST'])
 @cross_origin()
 def free_text_query():
-	global model, tfmodel, thresholds, qa_enum, nlp, sbert
+	global model, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert
 	# query parsing for ajax call
 	args = request.args
 	query = args['query']
@@ -120,7 +134,7 @@ def free_text_query():
 	staticquery = args['staticquery'] if 'staticquery' in args else 'live'
 	if not model or model != args_model or not sbert:
 		model = args_model
-		tfmodel, thresholds, qa_enum, nlp, sbert = load_models(model)
+		tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert = load_models(model)
 
 	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n"%(query, numsnippets, model, aggregator))
 	if staticquery == 'prefetched' and is_precomputed(query):
@@ -128,14 +142,14 @@ def free_text_query():
 		# return response and time elapsed in seconds
 		if len(query) > 0:
 			contexts, qtuples = prefetched_contexts(query)
-			response, time_elapsed = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, numsnippets, contexts=contexts, qtuples=qtuples)
+			response, time_elapsed = nlcounqer_pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, numsnippets, contexts=contexts, qtuples=qtuples)
 		else:
 			response, time_elapsed = {}, 0.0
 	else:
 		print('Querying live!!')
 		if len(query) > 0:
 			try:
-				response, time_elapsed = nlcounqer_pipeline(query, tfmodel, thresholds, qa_enum, nlp, sbert, aggregator, numsnippets)
+				response, time_elapsed = nlcounqer_pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, numsnippets)
 			except Exception:
 				print(traceback.format_exc())
 				response, time_elapsed = {}, 0.0
