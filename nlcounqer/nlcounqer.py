@@ -71,7 +71,7 @@ def load_models(model):
 	model_path_dict = json.load(open(count_config['paths']['ModelPath'], 'r'))
 	model_path = model_path_dict[model]['model_path']
 	count_thresholds = model_path_dict[model]['thresholds']
-	qa_count = pipeline("question-answering", model_path)
+	qa_count = pipeline("question-answering", model_path, batch_size=25)
 	
 	### enum models
 	enum_config = configparser.ConfigParser()
