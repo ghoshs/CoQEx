@@ -52,7 +52,7 @@ def structured_count(text, cogcomp_result, quant_pattern, ntuple_pattern):
 def get_cogcomp_ntuples(snippet):
 	empty_extraction = []
 	tempfile = TmpDir + 'tmp' + '_' + str(random.random())[2:] + '.txt'
-	with open(tempfile, 'w') as fp:
+	with open(tempfile, 'w', encoding='utf-8') as fp:
 		fp.write(snippet)
 	process_args = ['java', '-cp', CogCompPath, CogCompQuantifier, tempfile, NormalizeQuant]
 	cogcomp_result = run_subprocess(process_args)

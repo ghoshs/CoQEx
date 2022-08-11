@@ -35,15 +35,35 @@ def predict_count(query, contexts, tfmodel, thresholds, aggregator, nlp, sbert):
 	time_elapsed_extraction = 0
 	time_elapsed_aggregation = 0
 	time_elapsed_contextualization = 0
+	countqa_contexts = [item['context'] for item in contexts if len(item['context'])>0]
+	tic = time.perf_counter()
+	
+	## 1. span prediction 
+	try:
+		countqa_pred = tfmodel(question=[query]*len(countqa_contexts), context=countqa_contexts, handle_impossible_answer=True)
+	except:
+		countqa_pred = []
+	finally:
+		time_elapsed_prediction += time.perf_counter() - tic
+	# if len(answers) == 0:
+	# 	for item in contexts:
+
+	pred_idx=0
 	for item in contexts:
 		## 1. span prediction 
-		try:
-			tic = time.perf_counter()
-			answer = tfmodel(question=query, context=item['context'])
-			time_elapsed_prediction += time.perf_counter() - tic
-		except:
-			answer = {'answer':'', 'score': 0, 'start': -1}
-		finally:
+		# try:
+		# 	tic = time.perf_counter()
+		# 	answer = tfmodel(question=query, context=item['context'])
+		# 	time_elapsed_prediction += time.perf_counter() - tic
+		# except:
+		# 	answer = {'answer':'', 'score': 0, 'start': -1}
+		# finally:
+			if len(countqa_pred) == 0 or len(item['context']) == 0:
+				answer = {'answer':'', 'score': 0, 'start': -1}
+			else:
+				answer = countqa_pred[pred_idx]
+				pred_idx += 1
+
 			##2. Count extraction
 			tic = time.perf_counter()
 			item['count_span'] = {'text': answer['answer'], 'score': answer['score'], 'start': answer['start']}
