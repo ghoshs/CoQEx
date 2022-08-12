@@ -58,6 +58,12 @@ def get_cnp_classes(sbert, cnp_rep, cnps_group1, cnps_group2, prediction, cutoff
 			sorted_data.append((cardinal, score, _id, text, 'subgroup'))
 		for cardinal, score, _id, text in unrelated:
 			sorted_data.append((cardinal, score, _id, text, 'incomparable'))
+	elif len(cnps_group2) > 0:
+		"""
+			when no good match for cnp rep all are incomparables
+		"""
+		for cardinal, score, _id, text in cnps_group2:
+			sorted_data.append((cardinal, score, _id, text, 'incomparable'))
 	return sorted_data
 
 
@@ -80,5 +86,8 @@ def count_contextualization(sbert, prediction, sorted_data, annotated_contexts):
 	id_cnp_class = {_id: cnp_class for _, _, _id, _, cnp_class in sorted_data}
 	for item in annotated_contexts:
 		if 'count_span' in item and 'selected' in item['count_span'] and item['count_span']['selected']:
-			item['count_span']['cnp'] = id_cnp_class[item['rank']]
+			if item['rank'] in id_cnp_class:
+				item['count_span']['cnp'] = id_cnp_class[item['rank']]
+			else:
+				item['count_span']['cnp'] = None
 	return sorted_data, annotated_contexts

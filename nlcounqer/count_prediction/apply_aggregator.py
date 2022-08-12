@@ -80,16 +80,20 @@ def apply_aggregator(contexts, aggregator, thresholds):
 	data, annotated_contexts = prepare_data(contexts, thresholds[aggregator])
 	if aggregator == 'weighted':
 		prediction, sorted_data = get_weighted_prediction(data)
-		print('Prediction: ', prediction)
+		print('Weighted Prediction: ', prediction)
 		print('Sorted data: ', sorted_data)
 	elif aggregator == 'median':
 		prediction, sorted_data = get_median_prediction(data)
-		print('Prediction: ', prediction)
+		print('Median Prediction: ', prediction)
 		print('Sorted data: ', sorted_data)
 	elif aggregator == 'max':
 		prediction, sorted_data = get_max_prediction(data)
+		print('Max Prediction: ', prediction)
+		print('Sorted data: ', sorted_data)
 	elif aggregator == 'frequent':
 		prediction, sorted_data = get_frequent_prediction(data)
+		print('Frequent Prediction: ', prediction)
+		print('Sorted data: ', sorted_data)
 	else:
 		prediction, sorted_data = None, None
 	return prediction, sorted_data, annotated_contexts

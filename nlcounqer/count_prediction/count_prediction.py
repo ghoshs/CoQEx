@@ -36,28 +36,21 @@ def predict_count(query, contexts, tfmodel, thresholds, aggregator, nlp, sbert):
 	time_elapsed_aggregation = 0
 	time_elapsed_contextualization = 0
 	countqa_contexts = [item['context'] for item in contexts if len(item['context'])>0]
-	tic = time.perf_counter()
 	
+	with open('/nlcounqer/debug/contexts.json', 'w', encoding='utf-8') as fp:
+		json.dump(countqa_contexts, fp)
+
 	## 1. span prediction 
 	try:
+		tic = time.perf_counter()
 		countqa_pred = tfmodel(question=[query]*len(countqa_contexts), context=countqa_contexts, handle_impossible_answer=True)
 	except:
 		countqa_pred = []
 	finally:
-		time_elapsed_prediction += time.perf_counter() - tic
-	# if len(answers) == 0:
-	# 	for item in contexts:
-
+		time_elapsed_prediction = time.perf_counter() - tic
+	
 	pred_idx=0
 	for item in contexts:
-		## 1. span prediction 
-		# try:
-		# 	tic = time.perf_counter()
-		# 	answer = tfmodel(question=query, context=item['context'])
-		# 	time_elapsed_prediction += time.perf_counter() - tic
-		# except:
-		# 	answer = {'answer':'', 'score': 0, 'start': -1}
-		# finally:
 			if len(countqa_pred) == 0 or len(item['context']) == 0:
 				answer = {'answer':'', 'score': 0, 'start': -1}
 			else:
