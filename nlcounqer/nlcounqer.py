@@ -71,7 +71,7 @@ def load_models(model):
 	model_path_dict = json.load(open(count_config['paths']['ModelPath'], 'r'))
 	model_path = model_path_dict[model]['model_path']
 	count_thresholds = model_path_dict[model]['thresholds']
-	qa_count = pipeline("question-answering", model_path, batch_size=25)
+	qa_count = pipeline("question-answering", model_path)
 	
 	### enum models
 	enum_config = configparser.ConfigParser()
@@ -145,6 +145,11 @@ def free_text_query():
 			response, time_elapsed = nlcounqer_pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, numsnippets, contexts=contexts, qtuples=qtuples)
 		else:
 			response, time_elapsed = {}, 0.0
+	elif staticquery == 'precomputed' and is_precomputed(query):
+		print('precomputed!!')
+		# return response and time elapsed in seconds
+		if len(query) > 0:
+			response, time_elapsed = get_precomputed_result(query)
 	else:
 		print('Querying live!!')
 		if len(query) > 0:
