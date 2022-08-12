@@ -70,17 +70,18 @@ def get_precomputed_result(query):
 	tic = time.perf_counter()
 	response = None
 	with open(PRECOMPDATA, 'r', encoding='utf-8') as fp:
-		for line in fp:
+		for line in fp.readlines():
 			try:
-				q, r = json.loads(line).items()[0]
+				q, r = list(json.loads(line).items())[0]
 			except:
 				q, r = None, {}
 			finally:
 				if q == query:
+					print("Found response for query; ", q, query)
 					response = r
 					break
 	time_elapsed = time.perf_counter() - tic
 	if response is not None:
-		return response, ime_elapsed
+		return response, time_elapsed
 	else:
 		return {}, time_elapsed
