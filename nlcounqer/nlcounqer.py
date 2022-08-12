@@ -20,7 +20,7 @@ from sentence_transformers import SentenceTransformer
 from pipeline import pipeline as nlcounqer_pipeline
 from retrieval.bing_search import call_bing_api
 from precomputed.query import is_precomputed, query_list
-from precomputed.precomputed import precomputed_queries, prefetched_contexts
+from precomputed.precomputed import prefetched_contexts, get_precomputed_result
 print('cache root before loading: ',os.getenv('ALLENNLP_CACHE_ROOT'))
 
 
@@ -61,7 +61,7 @@ def signal_handler(signal, frame):
 	sys.exit(0)
 
 # signal.signal(signal.SIGINT, signal_handler)
-def load_models(model):
+def load_models(model='default'):
 	### count models
 	count_config = configparser.ConfigParser()
 	# count_config.read('//nlcounqer/count_prediction/count_config.ini')
@@ -129,9 +129,9 @@ def free_text_query():
 	numsnippets = args['snippets'] 
 	
 	# check for optional arguments from aggregator calls
+	staticquery = args['staticquery'] if 'staticquery' in args else 'live'
 	args_model = args['model'] if 'model' in args else 'default'
 	aggregator = args['aggregator'] if 'aggregator' in args else 'weighted'
-	staticquery = args['staticquery'] if 'staticquery' in args else 'live'
 	if not model or model != args_model or not sbert:
 		model = args_model
 		tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert = load_models(model)
@@ -168,8 +168,12 @@ def free_text_query():
 @app.route('/')
 @cross_origin()
 def display_mainpage():
-        #return "Hello World!"
+	#return "Hello World!"
+	global model, sbert
+	if not model or not sbert:
+		load_models("default")
 	return render_template('index.html')
 
 if __name__ == '__main__':
+	# load_models('default')
 	app.run(debug=True, port=5000)
