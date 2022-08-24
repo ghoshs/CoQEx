@@ -6,7 +6,7 @@ path = '/nlcounqer/'
 
 file_maps = {
 	'query': {
-		'coquad_100': path + 'static/data/queries/coquad_100_v1/coquad_100_ntuples.csv',
+		# 'coquad_100': path + 'static/data/queries/coquad_100_v1/coquad_100_ntuples.csv',
 		'kg50': path + 'static/data/queries/coquad_v1/kg50_ntuples.csv',
 		'snippet100': path + 'static/data/queries/coquad_v1/snippet100_ntuples.csv',
 		'organic100': path + 'static/data/queries/coquad_v1/organic100_ntuples.csv',
@@ -83,16 +83,16 @@ def is_organic100_query(query):
 
 
 def is_precomputed(query):
-	if is_coquad_100_query(query):
-		return True
-	elif is_kg50_query(query):
+	# if is_coquad_100_query(query):
+		# return True
+	if is_kg50_query(query):
 		return True
 	elif is_snippet100_query(query):
 		return True
 	elif is_organic100_query(query):
 		return True
-	elif is_stresstest_query(query):
-		return True
+	# elif is_stresstest_query(query):
+	# 	return True
 	else:
 		return False
 
