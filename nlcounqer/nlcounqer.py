@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, json, request, jsonify, send_from_directory
+from flask import Flask, render_template, url_for, json, request, jsonify
 from flask_cors import CORS, cross_origin
 import json
 import pprint
@@ -135,6 +135,8 @@ def get_query_list():
 @app.route('/ftresults', methods=['GET', 'POST'])
 @cross_origin()
 def free_text_query():
+	print('Sucess!! Request:', request)
+	print('Computation will start now .. ')
 	global model, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert
 	# query parsing for ajax call
 	args = request.args
@@ -145,9 +147,9 @@ def free_text_query():
 	staticquery = args['staticquery'] if 'staticquery' in args else 'live'
 	args_model = args['model'] if 'model' in args else 'default'
 	aggregator = args['aggregator'] if 'aggregator' in args else 'weighted'
-	if not model or model != args_model or not sbert:
-		model = args_model
-		tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert = load_models(model)
+	# if not model or model != args_model or not sbert:
+	# 	model = args_model
+	# 	tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert = load_models(model)
 
 	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n"%(query, numsnippets, model, aggregator))
 	if staticquery == 'prefetched' and is_precomputed(query):
@@ -165,26 +167,29 @@ def free_text_query():
 			response, time_elapsed = get_precomputed_result(query)
 	else:
 		print('Querying live!!')
-		if len(query) > 0:
-			try:
-				response, time_elapsed = nlcounqer_pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, numsnippets)
-			except Exception:
-				print(traceback.format_exc())
-				response, time_elapsed = {}, 0.0
-		else:
-			response, time_elapsed = {}, 0.0
+		response, time_elapsed = {}, 0.0
+		# if len(query) > 0:
+		# 	try:
+		# 		response, time_elapsed = nlcounqer_pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, numsnippets)
+		# 	except Exception:
+		# 		print(traceback.format_exc())
+		# 		response, time_elapsed = {}, 0.0
+		# else:
+		# 	response, time_elapsed = {}, 0.0
 	response['q'] = query
 	response['time_in_sec'] = round(time_elapsed,2) 
 	# pprint.pprint(response, width=160)
+	# if request.method == 'POST':
+	# return jsonify({'redirect': url_for('results.html'), 'result': response})
 	return jsonify(response)
 
 @app.route('/')
 @cross_origin()
 def display_mainpage():
-	#return "Hello World!"
-	global model, sbert
-	if not model or not sbert:
-		load_models("default")
+	# global model, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert
+	# if not model or not sbert:
+	# 	model = "default"
+	# 	tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert = load_models(model)
 	return render_template('index.html')
 
 if __name__ == '__main__':
