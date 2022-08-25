@@ -13,7 +13,7 @@ print('cache root before setting env var: ',os.getenv('ALLENNLP_CACHE_ROOT'))
 
 os.environ['TRANSFORMERS_CACHE'] = '/.cache/huggingface/transformers/'
 
-from transformers import pipeline, AutoModelForQuestionAnswering, AutoTokenizer
+from transformers import pipeline, AutoConfig
 from sentence_transformers import SentenceTransformer
 # Download model beforehand -> set proxies on the terminal beforehand (export http-proxy.. )
 # load model from_pretrained with cache_dir passed
@@ -22,6 +22,7 @@ from retrieval.bing_search import call_bing_api
 from precomputed.query import is_precomputed, query_list
 from precomputed.precomputed import prefetched_contexts, get_precomputed_result
 print('cache root before loading: ',os.getenv('ALLENNLP_CACHE_ROOT'))
+
 
 
 ## to-do: implement max live queries = 100 per / day; maybe display counter on the website
@@ -80,12 +81,24 @@ def load_models(model='default'):
 	enum_config.read('/nlcounqer/enumeration_prediction/enum_config_server.ini')
 
 	nlp = spacy.load(enum_config['nlp']['Language'])
-	tokenizer = AutoTokenizer.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'], local_files_only=True)
-	model = AutoModelForQuestionAnswering.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
-	qa_enum = pipeline('question-answering', model=model, tokenizer=tokenizer)
+	model_path = enum_config['paths']['model']
+	qa_enum = pipeline('question-answering', model_path)
+	# tokenizer = AutoTokenizer.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'], local_files_only=True)
+	# model = AutoModelForQuestionAnswering.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
+	# qa_enum = pipeline('question-answering', model=model, tokenizer=tokenizer)
 	enum_threshold = float(enum_config['span']['threshold'])
 
 	typepredictor = enum_config['typeprediction']['model']
+	# archive_path = enum_config['typeprediction']['archivePath']
+	# local_config_path = enum_config['typeprediction']['localConfigPath']
+	# typepredictor_config = AutoConfig.from_pretrained(local_config_path)
+	# typepredictor = Predictor.from_path(
+	# 	archive_path,
+	# 	overrides={
+	# 		"model.bert_model": typepredictor_config.to_dict(),
+	# 		"dataset_reader.bert_model_name": local_config_path,
+	# 	},
+	# )
 	typepredictor = load_predictor(typepredictor)
 
 	## load sbert for count contextualization
@@ -126,9 +139,9 @@ def free_text_query():
 	# query parsing for ajax call
 	args = request.args
 	query = args['query']
-	numsnippets = args['snippets'] 
 	
 	# check for optional arguments from aggregator calls
+	numsnippets = args['snippets'] if 'snippets' in args else 50
 	staticquery = args['staticquery'] if 'staticquery' in args else 'live'
 	args_model = args['model'] if 'model' in args else 'default'
 	aggregator = args['aggregator'] if 'aggregator' in args else 'weighted'
