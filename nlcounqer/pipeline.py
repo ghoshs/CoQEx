@@ -15,12 +15,17 @@ def prepare_count_json(count_prediction, count_data, **kwargs):
 	print('Count result to json')
 	# ticcj = time.perf_counter()
 	count_data_fdict = defaultdict(int)
+	prediction = None
 	for num, score, id, text, cnp_class in count_data:
 		count_data_fdict[num] += 1
+		if num == count_prediction and cnp_class == 'cnprep':
+			prediction = [text, round(score, 2), id+1, num]
 	result = {
-		'prediction': count_prediction,
+		'prediction': prediction,
 		'all_count': [[item[3], round(item[1],2), item[2]+1, item[0], count_data_fdict[item[0]], item[4]] for item in count_data]
 	}
+	for arg in kwargs:
+		result[arg] = kwargs[arg]
 	return result
 
 
@@ -52,7 +57,7 @@ def prepare_enum_json(entity_data, **kwargs):
 	return result
 
 
-def pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, max_results, **kwargs):
+def pipeline(query, tfmodel, count_threshold, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, max_results, **kwargs):
 	result = {}
 	
 	### 1. Query modeling: namedtuple QTuples('type', 'entity', 'relation' 'context')
@@ -92,7 +97,13 @@ def pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepred
 	# 						dateLastCrawled,
 	# 						cardinal,
 	# 						count_span: dict(selected, text, score, context_class)))
-	count_prediction, count_data, results = predict_count(query, results, tfmodel, count_thresholds, aggregator, nlp, sbert)
+	count_prediction, count_data, results, reduced_threshold = predict_count(query, 
+		results, 
+		tfmodel, 
+		count_threshold, 
+		aggregator, 
+		nlp, sbert
+	)
 	print("Completed in %.4f secs."%(time.perf_counter() - ticc))
 
 	### 4. Enumeration predction
@@ -118,7 +129,15 @@ def pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepred
 	# 						count_span: dict(selected, text, score, context_class)
 	# 						entities: dict(entity_text: 
 	# 										dict(selected, score, start, answer, entity, canonical))))
-	entity_data, results = predict_enumerations(query, qtuples, results, qa_enum, nlp, typepredictor, span_threshold=enum_threshold)
+	entity_data, results = predict_enumerations(
+		query, 
+		qtuples, 
+		results, 
+		qa_enum, 
+		nlp, 
+		typepredictor, 
+		span_threshold=enum_threshold
+	)
 	print("Completed in %.4f secs."%(time.perf_counter() - tice))
 	
 	result['qtuples'] = {
@@ -139,7 +158,7 @@ def pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepred
 	# 								confidence, entailment, 
 	# 								typecom_score, ansconf_score, freq_score, windoc_score]
 	# 							  )))
-	result['count'] = prepare_count_json(count_prediction, count_data) 
+	result['count'] = prepare_count_json(count_prediction, count_data, reduced_threshold=reduced_threshold) 
 	result['entities'] = prepare_enum_json(entity_data) 
 	result['annotations'] = results
 

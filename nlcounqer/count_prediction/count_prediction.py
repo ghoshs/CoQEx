@@ -17,7 +17,7 @@ def get_noun_phrase_w_count(nlp, context, answer, start):
 	return None, None
 
 
-def predict_count(query, contexts, tfmodel, thresholds, aggregator, nlp, sbert):
+def predict_count(query, contexts, tfmodel, threshold, aggregator, nlp, sbert):
 	"""
 		Returns the following variables
 		prediction -> int
@@ -37,8 +37,8 @@ def predict_count(query, contexts, tfmodel, thresholds, aggregator, nlp, sbert):
 	time_elapsed_contextualization = 0
 	countqa_contexts = [item['context'] for item in contexts if len(item['context'])>0]
 	
-	with open('/nlcounqer/debug/contexts.json', 'w', encoding='utf-8') as fp:
-		json.dump(countqa_contexts, fp)
+	# with open('/nlcounqer/debug/contexts.json', 'w', encoding='utf-8') as fp:
+	# 	json.dump(countqa_contexts, fp)
 
 	## 1. span prediction 
 	try:
@@ -79,7 +79,7 @@ def predict_count(query, contexts, tfmodel, thresholds, aggregator, nlp, sbert):
 
 	##3. Evaluate
 	tic = time.perf_counter()
-	prediction, sorted_data, annotated_contexts = apply_aggregator(contexts, aggregator, thresholds)
+	prediction, sorted_data, annotated_contexts, reduced_threshold = apply_aggregator(contexts, aggregator, threshold)
 	time_elapsed_aggregation += time.perf_counter() - tic
 
 	##4. Classify Count Contexts
@@ -89,4 +89,4 @@ def predict_count(query, contexts, tfmodel, thresholds, aggregator, nlp, sbert):
 
 	print('Prediction took %.4f secs\nExtraction took %.4f secs\nAggregation took %.4f secs\nContextualization took %.4f secs'%\
 		(time_elapsed_prediction, time_elapsed_extraction, time_elapsed_aggregation, time_elapsed_contextualization))
-	return prediction, sorted_data, annotated_contexts
+	return prediction, sorted_data, annotated_contexts, reduced_threshold

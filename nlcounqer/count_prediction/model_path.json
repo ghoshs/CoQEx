@@ -1,38 +1,14 @@
 {
 	"base_model": {
 		"model_path": "SpanBERT/spanbert-base-cased", 
-		"thresholds": {
-			"max": 0.5,
-			"median": 0.5,
-			"weighted": 0.5,
-			"frequent": 0.5
-		}
+		"threshold": 0.5
 	},
-	"fine_tuned_coquad": {
-		"model_path": "/nlcounqer/static/data/models/Spanbert/spanbert-bert-cased/0",
-		"thresholds": {
-			"max": 0.5,
-			"median": 0.5,
-			"weighted": 0.5,
-			"frequent": 0.5
-		}
-	}, 
 	"fine_tuned_squad":	{
 		"model_path": "mrm8488/spanbert-finetuned-squadv2",
-		"thresholds": {
-			"max": 0.5,
-			"median": 0.5,
-			"weighted": 0.5,
-			"frequent": 0.5
-		}
+		"threshold": 0.5
 	},
 	"default": {
 		"model_path": "/nlcounqer/static/data/models/Spanbert/spanbert-bert-cased/0",
-		"thresholds": {
-			"max": 0.5,
-			"median": 0.5,
-			"weighted": 0.5,
-			"frequent": 0.5
-		}
+		"threshold": 0.5
 	}
 }

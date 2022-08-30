@@ -32,14 +32,15 @@ try:
 except ImportError:
 	import urllib.request as myurllib
 
-model=tfmodel=count_thresholds=qa_enum=enum_threshold=typepredictor=nlp=sbert=None
-
+model=tfmodel=count_threshold=qa_enum=enum_threshold=typepredictor=nlp=sbert=None
+NUM_SNIPPETS = 50
 proxies = {
 
 
 
 
 }
+
 
 
 
@@ -71,7 +72,7 @@ def load_models(model='default'):
 	
 	model_path_dict = json.load(open(count_config['paths']['ModelPath'], 'r'))
 	model_path = model_path_dict[model]['model_path']
-	count_thresholds = model_path_dict[model]['thresholds']
+	count_threshold = model_path_dict[model]['threshold']
 	qa_count = pipeline("question-answering", model_path)
 	
 	### enum models
@@ -104,7 +105,7 @@ def load_models(model='default'):
 	## load sbert for count contextualization
 	sbert = SentenceTransformer(count_config['sbert']['SentBERTModel']) 
 
-	return qa_count, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert
+	return qa_count, count_threshold, qa_enum, enum_threshold, typepredictor, nlp, sbert
 	
 
 # flask app config
@@ -137,19 +138,22 @@ def get_query_list():
 def free_text_query():
 	print('Sucess!! Request:', request)
 	print('Computation will start now .. ')
-	global model, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert
+	global model, tfmodel, count_threshold, qa_enum, enum_threshold, typepredictor, nlp, sbert
 	# query parsing for ajax call
 	args = request.args
 	query = args['query']
 	
 	# check for optional arguments from aggregator calls
-	numsnippets = args['snippets'] if 'snippets' in args else 50
+	numsnippets = args['snippets'] if 'snippets' in args else NUM_SNIPPETS
 	staticquery = args['staticquery'] if 'staticquery' in args else 'live'
 	args_model = args['model'] if 'model' in args else 'default'
 	aggregator = args['aggregator'] if 'aggregator' in args else 'weighted'
-	# if not model or model != args_model or not sbert:
-	# 	model = args_model
-	# 	tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert = load_models(model)
+	if not model or model != args_model or not sbert:
+		model = args_model
+		tfmodel, count_threshold, qa_enum, enum_threshold, typepredictor, nlp, sbert = load_models(model)
+
+	# ####### REMOVE in final version 
+	staticquery = 'prefetched' if staticquery == 'precomputed' else staticquery 
 
 	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n"%(query, numsnippets, model, aggregator))
 	if staticquery == 'prefetched' and is_precomputed(query):
@@ -157,7 +161,7 @@ def free_text_query():
 		# return response and time elapsed in seconds
 		if len(query) > 0:
 			contexts, qtuples = prefetched_contexts(query)
-			response, time_elapsed = nlcounqer_pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, numsnippets, contexts=contexts, qtuples=qtuples)
+			response, time_elapsed = nlcounqer_pipeline(query, tfmodel, count_threshold, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, numsnippets, contexts=contexts, qtuples=qtuples)
 		else:
 			response, time_elapsed = {}, 0.0
 	elif staticquery == 'precomputed' and is_precomputed(query):
@@ -168,30 +172,23 @@ def free_text_query():
 	else:
 		print('Querying live!!')
 		response, time_elapsed = {}, 0.0
-		# if len(query) > 0:
-		# 	try:
-		# 		response, time_elapsed = nlcounqer_pipeline(query, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, numsnippets)
-		# 	except Exception:
-		# 		print(traceback.format_exc())
-		# 		response, time_elapsed = {}, 0.0
-		# else:
-		# 	response, time_elapsed = {}, 0.0
+		if len(query) > 0:
+			try:
+				response, time_elapsed = nlcounqer_pipeline(query, tfmodel, count_threshold, qa_enum, enum_threshold, typepredictor, nlp, sbert, aggregator, numsnippets)
+			except Exception:
+				print(traceback.format_exc())
 	response['q'] = query
 	response['time_in_sec'] = round(time_elapsed,2) 
-	# pprint.pprint(response, width=160)
-	# if request.method == 'POST':
-	# return jsonify({'redirect': url_for('results.html'), 'result': response})
 	return jsonify(response)
 
 @app.route('/')
 @cross_origin()
 def display_mainpage():
-	# global model, tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert
-	# if not model or not sbert:
-	# 	model = "default"
-	# 	tfmodel, count_thresholds, qa_enum, enum_threshold, typepredictor, nlp, sbert = load_models(model)
+	global model, tfmodel, count_threshold, qa_enum, enum_threshold, typepredictor, nlp, sbert
+	if not model or not sbert:
+		model = "default"
+		tfmodel, count_threshold, qa_enum, enum_threshold, typepredictor, nlp, sbert = load_models(model)
 	return render_template('index.html')
 
 if __name__ == '__main__':
-	# load_models('default')
 	app.run(debug=True, port=5000)

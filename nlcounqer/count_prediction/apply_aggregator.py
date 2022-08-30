@@ -5,23 +5,30 @@ import random
 PERCENTILE_LEVEL = 50
 
 def prepare_data(contexts, threshold):
-	cardinals = []
-	scores = []
-	ids = []
-	text = []
-	for context in contexts:
-		if 'cardinal' in context and context['cardinal'] is not None and round(float(context['count_span']['score']),2) >= float(threshold) and int(context['cardinal'])>0:
-			cardinals.append(int(context['cardinal']))
-			scores.append(round(float(context['count_span']['score']), 2))
-			ids.append(int(context['rank']))
-			text.append(context['count_span']['text'])
-			context['count_span']['selected'] = True
-			context['count_span']['score'] = round(float(context['count_span']['score']),2)
-		elif 'cardinal' in context and context['cardinal'] is not None:
-			context['count_span']['selected'] = False
-			context['count_span']['score'] = round(float(context['count_span']['score']),2)
+	cardinals, scores, ids, text = [], [], [], []
+	reduced_threshold = threshold
+	MINIMUM_CARDINALS = 5
+	while len(cardinals) < MINIMUM_CARDINALS and reduced_threshold >= 0.0:
+		for context in contexts:
+			if 'selected' not in context['count_span'] or (not context['count_span']['selected']):
+				if 'cardinal' in context and context['cardinal'] is not None and round(float(context['count_span']['score']),2) >= float(reduced_threshold) and int(context['cardinal'])>0:
+					cardinals.append(int(context['cardinal']))
+					scores.append(round(float(context['count_span']['score']), 2))
+					ids.append(int(context['rank']))
+					text.append(context['count_span']['text'])
+					context['count_span']['selected'] = True
+					context['count_span']['score'] = round(float(context['count_span']['score']),2)
+				elif 'cardinal' in context and context['cardinal'] is not None:
+					context['count_span']['selected'] = False
+					context['count_span']['score'] = round(float(context['count_span']['score']),2)
+		if len(cardinals) >= MINIMUM_CARDINALS:
+			break
+		reduced_threshold -= 0.1
+	if reduced_threshold < 0:
+		reduced_threshold = 0
+
 	data = list(zip(np.array(cardinals), np.array(scores), np.array(ids), np.array(text, dtype=object)))
-	return data, contexts
+	return data, contexts, round(reduced_threshold, 2)
 
 
 def get_weighted_prediction(data):
@@ -76,8 +83,8 @@ def get_frequent_prediction(data):
 			sorted_scores.tolist(), sorted_ids.tolist(),sorted_texts.tolist()))
 
 
-def apply_aggregator(contexts, aggregator, thresholds):
-	data, annotated_contexts = prepare_data(contexts, thresholds[aggregator])
+def apply_aggregator(contexts, aggregator, threshold):
+	data, annotated_contexts, reduced_threshold = prepare_data(contexts, threshold)
 	if aggregator == 'weighted':
 		prediction, sorted_data = get_weighted_prediction(data)
 		print('Weighted Prediction: ', prediction)
@@ -96,4 +103,4 @@ def apply_aggregator(contexts, aggregator, thresholds):
 		print('Sorted data: ', sorted_data)
 	else:
 		prediction, sorted_data = None, None
-	return prediction, sorted_data, annotated_contexts
+	return prediction, sorted_data, annotated_contexts, reduced_threshold

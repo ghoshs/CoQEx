@@ -48,7 +48,11 @@ def get_cnp_classes(sbert, cnp_rep, cnps_group1, cnps_group2, prediction, cutoff
 					elif cardinal < prediction:
 						subgroup.append(cnps_group2[i])
 					else:
-						unrelated.append(cnps_group2[i])
+						# if high cosime similarity keep as equivalent else incomparables
+						if cosine_scores[0][i] > 0.5:
+							equivalent.append(cnps_group2[i])
+						else:
+							unrelated.append(cnps_group2[i])
 				else:
 					unrelated.append(cnps_group2[i])
 		sorted_data = [(cnp_rep[0], cnp_rep[1], cnp_rep[2], cnp_rep[3], 'cnprep')]
