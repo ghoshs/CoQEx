@@ -52,10 +52,9 @@ def get_model_predictions(qa, query, contexts, topk):
 
 def get_entities_spacy(contexts, predictions, nlp, span_threshold):
 	numeric_classes = ['DATE', 'PERCENT', 'TIME', 'MONEY', 'CARDINAL', 'QUANTITY', 'ORDINAL']
-	# nlp = spacy.load("en_core_web_sm")
-	canon_entities = {}
-	entities_per_context = {}
-	doc_scores = {}
+	canon_entities, entities_per_context, doc_scores = {}, {}, {}
+	MINIMUM_CANON_ENTITIES = 5 # same as MINIMUM_CARDINALS in count_prediction.apply_aggregator.prepare_data
+	num_canon_entities, reduced_threshold = None, None
 	for context in contexts:
 		_id = context['rank']
 		entities = {}
@@ -87,11 +86,39 @@ def get_entities_spacy(contexts, predictions, nlp, span_threshold):
 					canon_entities[canon_entity]['ann'].append([_id, entity['entity'], entity['start'], entity['answer'], entity['score']])
 				if _id not in doc_scores or (_id in doc_scores and doc_scores[_id] < entity['score']):
 					doc_scores[_id] = entity['score']
-		# entities_per_context[_id] = entities
+		
 		## highest score per context
 		context['entities'] = sorted([v for k, v in entities.items()], key=lambda x:x['start'])
-		# print('entities: ', context['entities'])
-	return contexts, canon_entities, doc_scores
+		
+	# reduced threshold setting if num_entities less than minimum entities
+	# num_entities = sum([entity['selected'] for context in contexts for entity in context['entities']])
+	num_canon_entities = sum([len(canon_entities[ent]['ann'])>0 for ent in canon_entities])
+	if num_canon_entities >= MINIMUM_CANON_ENTITIES:
+		reduced_threshold = span_threshold
+	else:
+		reduced_threshold = span_threshold - 0.1
+
+	while num_canon_entities < MINIMUM_CANON_ENTITIES and reduced_threshold >= 0:
+		for context in contexts:
+			_id = context['rank']
+			for entity in context['entities']:
+				if not entity['selected'] and entity['score'] >= reduced_threshold:
+					canon_entity = entity['canonical']
+					if canon_entity not in canon_entities:
+						canon_entities[canon_entity] = {'ann': []}
+					canon_entities[canon_entity]['ann'].append([_id, entity['entity'], entity['start'], entity['answer'], entity['score']])
+					if _id not in doc_scores or (_id in doc_scores and doc_scores[_id] < entity['score']):
+						doc_scores[_id] = entity['score']
+					entity['selected'] = True
+		# num_entities = sum([entity['selected'] for context in contexts for entity in context['entities']])
+		num_canon_entities = sum([len(canon_entities[ent]['ann'])>0 for ent in canon_entities])
+
+		if num_canon_entities >= MINIMUM_CANON_ENTITIES:
+			break
+		reduced_threshold =- 0.1
+	reduced_threshold = max(0, reduced_threshold)
+	
+	return contexts, canon_entities, doc_scores, round(reduced_threshold, 2)
 
 
 def get_entities(contexts, predictions, nlp, span_threshold=0.0, **kwargs):
@@ -184,7 +211,7 @@ def predict_enumerations(query, qtuples, contexts, qa, nlp, entpredictor, topk=1
 	print('Completed in: %.4f secs'%(toc-tic))
 	## 2. Get ranked named-entity mentions
 	print('Enum: Getting named entities')
-	annotated_contexts, canon_entities, doc_scores = get_entities(contexts, predictions, nlp, span_threshold)
+	annotated_contexts, canon_entities, doc_scores, reduced_threshold = get_entities(contexts, predictions, nlp, span_threshold)
 	tic = time.perf_counter()
 	print('Completed in: %.4f secs'%(tic-toc))
 	## 3. Rank entities
@@ -195,5 +222,12 @@ def predict_enumerations(query, qtuples, contexts, qa, nlp, entpredictor, topk=1
 	canon_entities = rank_entities(canon_entities, entailment, doc_scores, sentence_boundaries)
 	toc = time.perf_counter()
 	print('Completed in: %.4f secs'%(toc-tic))
+	# ## 4. updating entity annotation scores
+	# print('Enum: Updating enum scores in annotations')
+	# for context in annotated_contexts:
+	# 	for ent in context['entities']:
+	# 		ent['score'] = canon_entities[ent['canonical']]['type_compatibility_score']
+	# tic = time.perf_counter()
+	# print('Completed in: %.4f secs'%(tic-toc))
 	print('Enum: Returning enum predictions')
-	return canon_entities, annotated_contexts
+	return canon_entities, annotated_contexts, reduced_threshold

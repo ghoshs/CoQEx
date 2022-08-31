@@ -13,7 +13,7 @@ from enumeration_prediction.enumeration_prediction import predict_enumerations
 
 def prepare_count_json(count_prediction, count_data, **kwargs):
 	print('Count result to json')
-	# ticcj = time.perf_counter()
+
 	count_data_fdict = defaultdict(int)
 	prediction = None
 	for num, score, id, text, cnp_class in count_data:
@@ -31,11 +31,7 @@ def prepare_count_json(count_prediction, count_data, **kwargs):
 
 def prepare_enum_json(entity_data, **kwargs):
 	print('Enumeration result to json')
-	# ticej = time.perf_counter()
-	# entity_fdict = defaultdict(int)
-	# entity_conf = defaultdict(list)
-	# for item in entity_data:
-	# 	entity_fdict[item[1]] += 1
+	
 	result = {'all_entity': []}
 	for canon_entity in entity_data:
 		for cid, entity, start, answer, conf, entailment in entity_data[canon_entity]['ann']:
@@ -49,11 +45,10 @@ def prepare_enum_json(entity_data, **kwargs):
 				round(entity_data[canon_entity]['context_frequency_score'],2),
 				round(entity_data[canon_entity]['winning_document_score'],2),
 				])
-	# result = {
-	# 	# 'all_entity_conf': [[e, s, i+1] for i,e,s in entity_data],
-	# 	# 'entity_freq': ', '.join([k + ' (' + str(v) + ')' for k, v in entity_fdict]),
-	# 	'all_entity': [[entity, round(score,2), _id+1, start, round(conf,2), entity_fdict[entity]] for _id,entity,conf,start,score in entity_data]
-	# }
+	
+	for arg in kwargs:
+		result[arg] = kwargs[arg]
+
 	return result
 
 
@@ -97,7 +92,7 @@ def pipeline(query, tfmodel, count_threshold, qa_enum, enum_threshold, typepredi
 	# 						dateLastCrawled,
 	# 						cardinal,
 	# 						count_span: dict(selected, text, score, context_class)))
-	count_prediction, count_data, results, reduced_threshold = predict_count(query, 
+	count_prediction, count_data, results, reduced_threshold_count = predict_count(query, 
 		results, 
 		tfmodel, 
 		count_threshold, 
@@ -129,7 +124,7 @@ def pipeline(query, tfmodel, count_threshold, qa_enum, enum_threshold, typepredi
 	# 						count_span: dict(selected, text, score, context_class)
 	# 						entities: dict(entity_text: 
 	# 										dict(selected, score, start, answer, entity, canonical))))
-	entity_data, results = predict_enumerations(
+	entity_data, results, reduced_threshold_enum = predict_enumerations(
 		query, 
 		qtuples, 
 		results, 
@@ -158,8 +153,8 @@ def pipeline(query, tfmodel, count_threshold, qa_enum, enum_threshold, typepredi
 	# 								confidence, entailment, 
 	# 								typecom_score, ansconf_score, freq_score, windoc_score]
 	# 							  )))
-	result['count'] = prepare_count_json(count_prediction, count_data, reduced_threshold=reduced_threshold) 
-	result['entities'] = prepare_enum_json(entity_data) 
+	result['count'] = prepare_count_json(count_prediction, count_data, reduced_threshold=reduced_threshold_count) 
+	result['entities'] = prepare_enum_json(entity_data, reduced_threshold=reduced_threshold_enum) 
 	result['annotations'] = results
 
 	toc = time.perf_counter()
