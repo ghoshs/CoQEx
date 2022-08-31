@@ -24,8 +24,7 @@ def prepare_data(contexts, threshold):
 		if len(cardinals) >= MINIMUM_CARDINALS:
 			break
 		reduced_threshold -= 0.1
-	if reduced_threshold < 0:
-		reduced_threshold = 0
+	reduced_threshold = max(0, reduced_threshold)
 
 	data = list(zip(np.array(cardinals), np.array(scores), np.array(ids), np.array(text, dtype=object)))
 	return data, contexts, round(reduced_threshold, 2)
