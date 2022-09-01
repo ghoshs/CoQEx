@@ -41,6 +41,8 @@ def get_model_predictions(qa, query, contexts, topk):
 	for item in contexts:
 		if query.startswith('How many ') or query.startswith('how many '):
 			query = 'Which ' + query[len('how many '):]
+		if query.lower().startswith('number of '):
+			query = 'Which ' + query[len('number of '):]
 		try:
 			answer = qa(question=query, context=item['context'], top_k=topk)
 		except:
