@@ -79,12 +79,13 @@ def get_precomputed_result(query):
 				if q == query:
 					print("Found response for query; ", q, query)
 					response = r
-					new_prediction = None
-					for text, score, snippet, num, freq, cnp_class in response['count']['all_count']:
-						if num == response['count']['prediction'] and cnp_class == 'cnprep':
-							new_prediction = [text, score, snippet, num]
-							break
-					response['count']['prediction'] = new_prediction		
+					print(response['count'])
+					# new_prediction = None
+					# for text, score, snippet, num, freq, cnp_class in response['count']['all_count']:
+					# 	if num == response['count']['prediction'] and cnp_class == 'cnprep':
+					# 		new_prediction = [text, score, snippet, num]
+					# 		break
+					# response['count']['prediction'] = new_prediction		
 					break
 	time_elapsed = time.perf_counter() - tic
 	if response is not None:
