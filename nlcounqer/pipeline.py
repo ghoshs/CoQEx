@@ -134,7 +134,6 @@ def pipeline(query, tfmodel, count_threshold, qa_enum, enum_threshold, typepredi
 		span_threshold=enum_threshold
 	)
 	print("Completed in %.4f secs."%(time.perf_counter() - tice))
-	
 	result['qtuples'] = {
 		'type': qtuples.type, 
 		'entity': ';'.join(qtuples.entity), 

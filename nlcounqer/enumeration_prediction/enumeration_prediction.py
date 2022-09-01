@@ -92,7 +92,7 @@ def get_entities_spacy(contexts, predictions, nlp, span_threshold):
 		
 	# reduced threshold setting if num_entities less than minimum entities
 	# num_entities = sum([entity['selected'] for context in contexts for entity in context['entities']])
-	num_canon_entities = sum([len(canon_entities[ent]['ann'])>0 for ent in canon_entities])
+	num_canon_entities = sum([int(len(canon_entities[ent]['ann'])>0) for ent in canon_entities])
 	if num_canon_entities >= MINIMUM_CANON_ENTITIES:
 		reduced_threshold = span_threshold
 	else:
@@ -111,13 +111,11 @@ def get_entities_spacy(contexts, predictions, nlp, span_threshold):
 						doc_scores[_id] = entity['score']
 					entity['selected'] = True
 		# num_entities = sum([entity['selected'] for context in contexts for entity in context['entities']])
-		num_canon_entities = sum([len(canon_entities[ent]['ann'])>0 for ent in canon_entities])
-
+		num_canon_entities = sum([int(len(canon_entities[ent]['ann'])>0) for ent in canon_entities])
 		if num_canon_entities >= MINIMUM_CANON_ENTITIES:
 			break
-		reduced_threshold =- 0.1
+		reduced_threshold -= 0.1
 	reduced_threshold = max(0, reduced_threshold)
-	
 	return contexts, canon_entities, doc_scores, round(reduced_threshold, 2)
 
 

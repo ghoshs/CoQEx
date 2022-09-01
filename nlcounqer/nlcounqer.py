@@ -153,7 +153,7 @@ def free_text_query():
 		tfmodel, count_threshold, qa_enum, enum_threshold, typepredictor, nlp, sbert = load_models(model)
 
 	# ####### REMOVE in final version 
-	staticquery = 'prefetched' if staticquery == 'precomputed' else staticquery 
+	# staticquery = 'prefetched' if staticquery == 'precomputed' else staticquery 
 
 	print("Query: %s\n#snippets: %s\nmodel: %s\naggregator: %s\n"%(query, numsnippets, model, aggregator))
 	if staticquery == 'prefetched' and is_precomputed(query):
