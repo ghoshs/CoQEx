@@ -155,20 +155,28 @@ def get_entailment_scores(answer_type, canon_entities, context_dict, sentence_bo
 			context = context_dict[cid]
 			sentence = get_sentence(entity, context, sentence_boundaries[cid], int(start))
 			hypothesis = entity + ' is a ' + answer_type
-			inputs.append({"premise": sentence, "hypothesis": hypothesis, "label": None})
+			if not sentence.endswith('.'):
+				sentence += '.'
+			if not hypothesis.endswith('.'):
+				hypothesis += '.'
+			inputs.append(' '.join([sentence, hypothesis]))
+			# inputs.append({"premise": sentence, "hypothesis": hypothesis, "label": None})
 		# print('Num inputs to ent predictor: ', len(inputs))
 		if len(inputs) > 0:
-			predictions = entpredictor.predict_batch_json(inputs)
-		ent_probs = [EntailmentLabelProbs(*prediction['probs']) for prediction in predictions]
+			# predictions = entpredictor.predict_batch_json(inputs)
+			predictions = entpredictor(inputs)
+		# ent_probs = [EntailmentLabelProbs(*prediction['probs']) for prediction in predictions]
+		ent_probs = [pred['score'] if pred['label'] == 'ENTAILMENT' else -1 for pred in predictions]
 		entailment[canon_entity] = {}
 		for entity_tuple, prob in zip(canon_entities[canon_entity]['ann'], ent_probs):
-			if prob.entailment >= prob.neutral and prob.entailment >= prob.contradiction:
+			if prob > 0:
+			# if prob.entailment >= prob.neutral and prob.entailment >= prob.contradiction:
 				cid = entity_tuple[0]
 				if cid not in entailment[canon_entity]:
-					entailment[canon_entity][cid] = prob.entailment
+					entailment[canon_entity][cid] = prob
 				else:
 					if prob.entailment > entailment[canon_entity][cid]:
-						entailment[canon_entity][cid] = prob.entailment
+						entailment[canon_entity][cid] = prob
 	return entailment
 
 
