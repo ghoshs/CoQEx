@@ -74,24 +74,25 @@ class QueryModel(object):
 		
 		entity_tokens = set([ContextToken(token) for entity in entities for token in entity.span])
 		for token in query_annotated:
-			if token.pos_.lower() == 'noun' and answer_type == None: ## first noun is the answer type ### heuristic
+			if token.pos_.lower() == 'noun' and answer_type == None and token.text != 'number': ## first noun is the answer type ### heuristic
 				start_idx = token.i
 				for child in token.children:
 					if child.pos_.lower() in ['noun', 'adj'] and child.text.lower() != 'many' and child.i < start_idx:
 						start_idx = child.i
 				answer_type = query_annotated[start_idx: token.i+1]
 
-			elif token.pos_.lower() == 'noun':
+			elif token.pos_.lower() == 'noun' and answer_type is not None:
+				# include noun tokens immediately following the answer type in the answer type
 				if type(answer_type) == Token:
 					start_idx = answer_type.i
-					end_idx = end_idx + 1
+					end_idx = start_idx + 1
 				else:
 					start_idx = answer_type.start
 					end_idx = answer_type.end
 				if token.i == end_idx:
 					answer_type = query_annotated[start_idx:end_idx+1]
 				else:
-					if token.text.lower() not in ['how', 'many'] and ContextToken(token) not in entity_tokens and token.pos_.lower() not in non_contextual_pos:
+					if token.text.lower() not in ['how', 'many', 'number'] and ContextToken(token) not in entity_tokens and token.pos_.lower() not in non_contextual_pos:
 						context.add(ContextToken(token))
 		
 			elif token.pos_.lower() == 'verb' and token.dep_ == 'ROOT': ## if the root word is a verb then it is the relation 
