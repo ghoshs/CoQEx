@@ -175,7 +175,7 @@ def get_entailment_scores(answer_type, canon_entities, context_dict, sentence_bo
 				if cid not in entailment[canon_entity]:
 					entailment[canon_entity][cid] = prob
 				else:
-					if prob.entailment > entailment[canon_entity][cid]:
+					if prob > entailment[canon_entity][cid]:
 						entailment[canon_entity][cid] = prob
 	return entailment
 
