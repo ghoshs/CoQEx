@@ -132,9 +132,9 @@ def precomputed_query_id(query):
 
 
 def query_list():
-	queries = []
+	queries = {}
 	for query_set in file_maps['query']:
-		queries += list(pd.read_csv(os.path.join(path,file_maps['query'][query_set]))['query'].values)
+		queries[query_set] = list(pd.read_csv(os.path.join(path,file_maps['query'][query_set]))['query'].values)
 	# coquad_queries = list(pd.read_csv(path+'static/data/queries/coquad_v1/test_ntuples.csv')['query'].values)
 	# stresstest_queries = list(pd.read_csv(path+'static/data/queries/stresstest_v1/stresstest_ntuples.csv')['query'].values)
 	return queries
