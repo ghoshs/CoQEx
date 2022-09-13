@@ -98,18 +98,18 @@ def is_precomputed(query):
 
 
 def precomputed_query_type(query):
-	if is_coquad_100_query(query):
-		return 'coquad_100'
-	elif is_kg50_query(query):
+	# if is_coquad_100_query(query):
+		# return 'coquad_100'
+	if is_kg50_query(query):
 		return 'kg50'
-	elif is_snippet100_query(query):
+	if is_snippet100_query(query):
 		return 'snippet100'
-	elif is_organic100_query(query):
+	if is_organic100_query(query):
 		return 'organic100'
-	elif is_stresstest_query(query):
-		return 'stresstest'
-	else:
-		return 'invalid'
+	# elif is_stresstest_query(query):
+		# return 'stresstest'
+	# else:
+	return 'invalid'
 
 
 def precomputed_query_id(query):
