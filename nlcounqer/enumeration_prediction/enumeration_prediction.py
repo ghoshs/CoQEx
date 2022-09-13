@@ -30,9 +30,9 @@ class EntailmentLabelProbs(NamedTuple):
 	neutral: float = 0
 
 
-def pseudo_canonicalization(entity, stopwords):
+def pseudo_canonicalization(entity):
 	entity = entity.lower()
-	no_stopwords = [word for word in entity.split() if word not in stopwords]
+	no_stopwords = [word for word in entity.split() if word not in stopwords_en]
 	return ' '.join(no_stopwords)
 
 
@@ -52,8 +52,98 @@ def get_model_predictions(qa, query, contexts, topk):
 	return predictions
 
 
+def get_unique_predictions(old_preds):
+	if len(old_preds) == 1:
+		return old_preds
+	new_predictions = [old_preds[0]]
+	for pred in old_preds[1:]:
+		canon_answer = pseudo_canonicalization(pred['answer'])
+		overlap = False
+		for existing in new_predictions:
+			if pseudo_canonicalization(existing['answer']) == canon_answer:
+				overlap = True
+				break
+		if not overlap:
+			new_predictions.append(pred)
+	return new_predictions
+
+
+def same_mentions(existing, current):
+	existing_text = set([ent.text for ent in existing])
+	current_text = set([ent.text for ent in current])
+	return (len(existing_text.intersection(current_text)) == len(existing_text))
+
+
+def same_mention_components(existing, current):
+	existing_bow = []
+	current_bow = []
+	for ent in existing:
+		text = ent.text.lower()
+		no_stopwords = [word for word in text.split() if word not in stopwords_en]
+		existing_bow += no_stopwords
+	current_bow = []
+	for ent in current:
+		text = ent.text.lower()
+		no_stopwords = [word for word in text.split() if word not in stopwords_en]
+		current_bow += no_stopwords
+	overlap = len(current_bow) == len(existing_bow) and len(set(current_bow).intersection(set(existing_bow))) == len(existing_bow)
+	return overlap
+
+
+def get_unique_mentions(old_preds, numeric_classes, nlp):
+	new_predictions = []
+	for pred in old_preds:
+		ann = nlp(pred['answer'])
+		mentions = [(ent, ent.label_) for ent in ann.ents]
+		if any([label in numeric_classes for _, label in mentions]):
+			# answer contains a numberic class not instance
+			continue
+		else:
+			pred['mentions'] = [ent for ent, label in mentions if label not in numeric_classes+['CARDINAL','ORDINAL']]
+		if len(new_predictions) == 0 and len(pred['mentions']) > 0:
+			new_predictions.append(pred)
+		else:
+			overlap = False
+			for existing in new_predictions:
+				if len(existing['mentions']) == len(pred['mentions']) and same_mentions(existing['mentions'], pred['mentions']):
+					overlap = True
+					break
+				elif same_mention_components(existing['mentions'], pred['mentions']):
+					overlap = True
+					break
+			if not overlap and len(pred['mentions']) > 0:
+				new_predictions.append(pred)
+	return new_predictions
+
+
+def get_superstring_entity(curr_entity, entities):
+	superstring = None
+	for canon_entity in entities:
+		entity = entities[canon_entity]
+		if len(curr_entity['entity']) < len(entity['entity']) and curr_entity['entity'] in entity['entity']:
+		# if curr_entity['start'] >= entity['start'] and len(curr_entity['entity']) < len(entity['entity']):
+			superstring = entity
+			break
+	return superstring 
+
+
+# def is_contained(curr_entity, entities):
+# 	return get_superstring_entity(curr_entity, entities) is not None
+def is_superstring(curr_entity, entities):
+	is_superstring_of = None
+	for canon_entity in entities:
+		entity = entities[canon_entity]
+		# if entity text of current entity is a superstring
+		if len(entity['entity']) < len(curr_entity['entity']) and entity['entity'] in curr_entity['entity']:
+		# if entity['start'] >= curr_entity['start'] and (len(entity['entity']) < len(curr_entity['entity'])):
+			is_superstring_of = canon_entity
+			break
+	return is_superstring_of
+
+
 def get_entities_spacy(contexts, predictions, nlp, span_threshold):
-	numeric_classes = ['DATE', 'PERCENT', 'TIME', 'MONEY', 'CARDINAL', 'QUANTITY', 'ORDINAL']
+	# numeric_classes = ['DATE', 'PERCENT', 'TIME', 'MONEY', 'CARDINAL', 'QUANTITY', 'ORDINAL']
+	numeric_classes = ['DATE', 'PERCENT', 'TIME', 'MONEY', 'QUANTITY']
 	canon_entities, entities_per_context, doc_scores = {}, {}, {}
 	MINIMUM_CANON_ENTITIES = 5 # same as MINIMUM_CARDINALS in count_prediction.apply_aggregator.prepare_data
 	num_canon_entities, reduced_threshold = None, None
@@ -62,12 +152,17 @@ def get_entities_spacy(contexts, predictions, nlp, span_threshold):
 		entities = {}
 		if type(predictions[_id]) == dict: #model gives only one answer
 			predictions[_id] = [predictions[_id]]
-		for answer in predictions[_id]:
-			ann = nlp(answer['answer'])
-			mentions = [mention for mention in ann.ents if mention.label_ not in numeric_classes]
+		# remove low scoring predictions with same bag of words
+		unique_predictions = get_unique_predictions(predictions[_id])
+		# remove predictions with cardinals or low scoring predictions with same entity mentions
+		unique_mentions = get_unique_mentions(unique_predictions, numeric_classes, nlp)
+		for answer in unique_mentions:
+			mentions = answer['mentions']
+			# ann = nlp(answer['answer'])
+			# mentions = [mention for mention in ann.ents if mention.label_ not in numeric_classes]
 			for mention in mentions:
 				entity_startchar = mention.start_char
-				canon_entity = pseudo_canonicalization(mention.text, stopwords_en)
+				canon_entity = pseudo_canonicalization(mention.text)
 				entity = { 
 						  'score': round(float(answer['score']),2), 
 						  'start': answer['start'] + entity_startchar,
@@ -76,11 +171,27 @@ def get_entities_spacy(contexts, predictions, nlp, span_threshold):
 						  'canonical': canon_entity
 						 }
 				entity['selected'] = entity['score']>=span_threshold
-				# todo: check containment 
+				superstring_entity = get_superstring_entity(entity, entities)
+				is_superstring_of = is_superstring(entity, entities)
 				if canon_entity in entities and entity['start'] == entities[canon_entity]['start']:
+					# entity is previously identified
 					if entity['score'] > entities[canon_entity]['score']:
 						entities[canon_entity]['score'] = entity['score']
+						# print('adding equal with higher score: ', entity)
+				elif superstring_entity is not None:
+					# if substring has higher score keep that else discard
+					if superstring_entity['score'] < entity['score']:
+						entities[canon_entity] = entity
+						# print('adding substring with higher score: ', entity)
+				elif is_superstring_of is not None:
+					if entity['score'] > entities[is_superstring_of]['score']:
+						entities[canon_entity] = entity
+						# delete is_superstring_of 
+						# print('adding superstring entity with higher score: ', entity)
+						# print('popping out: ', is_superstring_of)
+						entities.pop(is_superstring_of)
 				else:
+					# print('adding unconditionally: ', entity)
 					entities[canon_entity] = entity
 				if canon_entity not in canon_entities:
 					canon_entities[canon_entity] = {'ann': []}
