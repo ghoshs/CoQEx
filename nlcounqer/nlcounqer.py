@@ -8,22 +8,17 @@ import glob
 import traceback
 import spacy
 import configparser
-# set cache directories before loading the predictor module
-# print('cache root before setting env var: ',os.getenv('ALLENNLP_CACHE_ROOT'))
-
+## set cache directories before loading the predictor module
 os.environ['TRANSFORMERS_CACHE'] = '/.cache/huggingface/transformers/'
 
 from transformers import pipeline
 from sentence_transformers import SentenceTransformer
-# Download model beforehand -> set proxies on the terminal beforehand (export http-proxy.. )
-# load model from_pretrained with cache_dir passed
+## Download model beforehand -> set proxies on the terminal beforehand (export http-proxy.. )
+## load model from_pretrained with cache_dir passed
 from pipeline import pipeline as nlcounqer_pipeline
 from retrieval.bing_search import call_bing_api
 from precomputed.query import is_precomputed, query_list
 from precomputed.precomputed import prefetched_contexts, get_precomputed_result
-# print('cache root before loading: ',os.getenv('ALLENNLP_CACHE_ROOT'))
-
-
 
 ## to-do: implement max live queries = 100 per / day; maybe display counter on the website
 
@@ -84,13 +79,8 @@ def load_models(model='default'):
 	nlp = spacy.load(enum_config['nlp']['Language'])
 	model_path = enum_config['paths']['model']
 	qa_enum = pipeline('question-answering', model_path)
-	# tokenizer = AutoTokenizer.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'], local_files_only=True)
-	# model = AutoModelForQuestionAnswering.from_pretrained(enum_config['paths']['Model'], cache_dir=enum_config['paths']['CacheDir'])
-	# qa_enum = pipeline('question-answering', model=model, tokenizer=tokenizer)
 	enum_threshold = float(enum_config['span']['threshold'])
 
-	# typepredictor = enum_config['typeprediction']['model']
-	# typepredictor = load_predictor(typepredictor)
 	typepredictor = pipeline('text-classification', model=enum_config['typeprediction']['model'])
 
 	## load sbert for count contextualization
