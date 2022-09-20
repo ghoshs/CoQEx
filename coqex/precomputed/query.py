@@ -1,8 +1,6 @@
 import pandas as pd
 import os
-# path = '//nlcounqer/'
-## server edit ##
-path = '/nlcounqer/'
+path = '/coqex/'
 
 file_maps = {
 	'query': {

@@ -28,6 +28,8 @@ Run `./download.sh` to download all data in the dataset folder.
 
 ## Code <a name="code"></a>
 
+The code for setting up a Flask app of CoQEx is included in the folder `coqex/`.
+ 
 A pipeline for executing CoQEx coming up soon.
 
 ## Citation <a name="citation"></a> 

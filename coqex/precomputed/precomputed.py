@@ -7,10 +7,8 @@ import time
 from collections import defaultdict
 
 
-# path = '//nlcounqer/'
-## server edit ##
-path = '/nlcounqer/'
-PRECOMPDATA = '/nlcounqer/static/data/precomputed/precomputed.jsonl'
+path = '/coqex/'
+PRECOMPDATA = '/coqex/static/data/precomputed/precomputed.jsonl'
 
 """
 return precomputed results on CoQuAD using CoQEx

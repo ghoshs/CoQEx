@@ -1,5 +1,5 @@
 '''
-called from nlcounqer/pipeline.py
+called from coqex/pipeline.py
 return values:
 ## entity_data -> list(tuple(id, entity, conf, start, score_winning, score_frequent, score_conf, score_typecom))
 ## results -> list(dict(

@@ -36,9 +36,6 @@ def predict_count(query, contexts, tfmodel, threshold, aggregator, nlp, sbert):
 	time_elapsed_aggregation = 0
 	time_elapsed_contextualization = 0
 	countqa_contexts = [item['context'] for item in contexts if len(item['context'])>0]
-	
-	# with open('/nlcounqer/debug/contexts.json', 'w', encoding='utf-8') as fp:
-	# 	json.dump(countqa_contexts, fp)
 
 	## 1. span prediction 
 	try:

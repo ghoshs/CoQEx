@@ -29,12 +29,7 @@ except ImportError:
 
 model=tfmodel=count_threshold=qa_enum=enum_threshold=typepredictor=nlp=sbert=None
 NUM_SNIPPETS = 50
-proxies = {
-
-
-
-
-}
+proxies = {}
 
 
 
@@ -61,9 +56,7 @@ def signal_handler(signal, frame):
 def load_models(model='default'):
 	### count models
 	count_config = configparser.ConfigParser()
-	# count_config.read('//nlcounqer/count_prediction/count_config.ini')
-	## server edit ##
-	count_config.read('/nlcounqer/count_prediction/count_config_server.ini')
+	count_config.read('/coqex/count_prediction/count_config_server.ini')
 	
 	model_path_dict = json.load(open(count_config['paths']['ModelPath'], 'r'))
 	model_path = model_path_dict[model]['model_path']
@@ -72,9 +65,7 @@ def load_models(model='default'):
 	
 	### enum models
 	enum_config = configparser.ConfigParser()
-	# enum_config.read('//nlcounqer/enumeration_prediction/enum_config.ini')
-	## server edit ##
-	enum_config.read('/nlcounqer/enumeration_prediction/enum_config_server.ini')
+	enum_config.read('/coqex/enumeration_prediction/enum_config_server.ini')
 
 	nlp = spacy.load(enum_config['nlp']['Language'])
 	model_path = enum_config['paths']['model']
