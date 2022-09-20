@@ -1,0 +1,14 @@
+{
+	"base_model": {
+		"model_path": "SpanBERT/spanbert-base-cased", 
+		"threshold": 0.5
+	},
+	"fine_tuned_squad":	{
+		"model_path": "mrm8488/spanbert-finetuned-squadv2",
+		"threshold": 0.5
+	},
+	"default": {
+		"model_path": "/nlcounqer/static/data/models/Spanbert/spanbert-bert-cased/0",
+		"threshold": 0.5
+	}
+}
