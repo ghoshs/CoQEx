@@ -8,7 +8,7 @@
 		"threshold": 0.5
 	},
 	"default": {
-		"model_path": "/nlcounqer/static/data/models/Spanbert/spanbert-bert-cased/0",
+		"model_path": "/coqex/static/data/models/Spanbert/spanbert-bert-cased/0",
 		"threshold": 0.5
 	}
 }
