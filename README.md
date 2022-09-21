@@ -7,14 +7,27 @@
 
 ## Introduction <a name="introduction"></a>
 
+We introduce CoQEx as a method to answering queries on entity counts by consolidating evidences across multiple text snippets.
+The CoQEx methodology uses a span-based QA model to separately extract candidate count contexts and instances from the top-50 search-engine snippets. The user is shown the following components.
 
-merely answer these with a single, and sometimes puzzling number or return a ranked list of text snippets with different numbers.
-<emph>CoQEx</emph> is a methodology for answering count queries with inference, contextualization and explanatory evidence. Unlike
-previous systems, our method infers final answers from multiple observations, supports semantic qualifiers for the counts, and provides
-evidence by enumerating representative instances.
+<li>An <strong>answer inference</strong> is predicted by a distribution-aware inference over count contexts. </li>
+<li>
+    The count contexts are further classified into semantic groups with respect to the inferred answer to form the <strong>explanation by contexts</strong>. They are grouped based on whether the contexts are quite similar to the inferred answer or if they represent a subset of the inferred answer or if they are incomparable. 
+</li>
+<li>
+    The instances are ranked by their compatibility with the answer type. They form the <strong>explanation by instances</strong> since they likely ground the counts into their constituting entities. CoQEx extracts the answer type from the query.                  
+</li>
+<li>
+    The snippets are annotated with the count context and instance candidates to form the <strong>explanation by provenance</strong>.
+</li>
+                
+
+Unlike previous systems, our method infers final answers from multiple observations, supports semantic qualifiers for the counts, and provides evidence by enumerating representative instances.
 
 Here we provide the data for our paper:
-- <i>Answering Count Queries with Explanatory Evidence</i> Ghosh et al. SIGIR 2022 (<https://arxiv.org/pdf/2204.05039.pdf>).
+- <i>Answering Count Queries with Explanatory Evidence</i> Ghosh et al. SIGIR 2022 (<https://dl.acm.org/doi/pdf/10.1145/3477495.3531870>).
+
+And the code for setting up an interactive user demonstration.
 
 
 ## Data <a name="data"></a>
@@ -23,7 +36,16 @@ The data comprises:
 - `CoQuAD_v1` dataset - training data for inference, groundtruth annoatation for infernce, contextualization and explanations, annotated dataset characteristics,
 
 - `lcquad_v2` - subset of count queries from LC-QuAD v2 dataset with with groundtruth inference.
-
+<li>An <strong>answer inference</strong> is predicted by a distribution-aware inference over count contexts. </li>
+                <li>
+                    The count contexts are further classified into semantic groups with respect to the inferred answer to form the <strong>explanation by contexts</strong>. They are grouped based on whether the contexts are quite similar to the inferred answer or if they represent a subset of the inferred answer or if they are incomparable. 
+                </li>
+                <li>
+                    The instances are ranked by their compatibility with the answer type. They form the <strong>explanation by instances</strong> since they likely ground the counts into their constituting entities. CoQEx extracts the answer type from the query.                  
+                </li>
+                <li>
+                    The snippets are annotated with the count context and instance candidates to form the <strong>explanation by provenance</strong>.
+                
 Run `./download.sh` to download all data in the dataset folder.
 
 ## Code <a name="code"></a>
