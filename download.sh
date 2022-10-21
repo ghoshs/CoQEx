@@ -24,3 +24,9 @@ wget -r -O stresstest.zip https://nextcloud.mpi-klsb.mpg.de/index.php/s/G5NfyMo4
 unzip stresstest.zip -d ${COQEX_ROOT}/dataset/
 rm stresstest.zip
 echo "Download complete!"
+
+echo "Downloading CoQuAD_v2 dataset: train, test, dev.."
+wget -r -O stresstest.zip https://nextcloud.mpi-klsb.mpg.de/index.php/s/Qcno2Ta7qgAQ7cZ/download
+unzip coquad_v2.zip -d ${COQEX_ROOT}/dataset/
+rm coquad_v2.zip
+echo "Download complete!"
