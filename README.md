@@ -33,7 +33,7 @@ And the code for setting up an interactive user demonstration.
 
 ## Data <a name="data"></a>
 
-The [data][https://github.com/ghoshs/CoQEx/tree/main/data] for the SIGIR'22 and JoWS experiments can be found in the respective folders. The dayaset comprises:
+The [data](https://github.com/ghoshs/CoQEx/tree/main/data) for the SIGIR'22 and JoWS experiments can be found in the respective folders. The dayaset comprises:
 
 - `CoQuAD` dataset - training data for inference, groundtruth annoatation for infernce, contextualization and explanations, annotated dataset characteristics. Version 2 contains more evaluation data and query characteristics.
 
