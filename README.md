@@ -33,7 +33,7 @@ And the code for setting up an interactive user demonstration.
 
 ## Data <a name="data"></a>
 
-The [data](https://github.com/ghoshs/CoQEx/tree/main/data) for the SIGIR'22 and JoWS experiments can be found in the respective folders. The dayaset comprises:
+The [data](https://github.com/ghoshs/CoQEx/tree/main/data) for the [SIGIR'22](https://github.com/ghoshs/CoQEx/tree/main/data/SIGIR_2022#readme) and [JoWS](https://github.com/ghoshs/CoQEx/tree/main/data/JoWS_2022#readme) experiments can be found in the respective folders. The dataset comprises:
 
 - `CoQuAD` dataset - training data for inference, groundtruth annoatation for infernce, contextualization and explanations, annotated dataset characteristics. Version 2 contains more evaluation data and query characteristics.
 
@@ -44,7 +44,7 @@ The [data](https://github.com/ghoshs/CoQEx/tree/main/data) for the SIGIR'22 and 
 - `natural_questions` - a subset of count queries from Natural Questions dataset with groundtruth inferences.
 
                 
-Run `./download.sh` to download all data in the dataset folder or download them individually.
+Run [`./download.sh`](https://github.com/ghoshs/CoQEx/blob/main/data/download.sh) to download all data in the dataset folder or download them individually.
 
 ## Code <a name="code"></a>
 
