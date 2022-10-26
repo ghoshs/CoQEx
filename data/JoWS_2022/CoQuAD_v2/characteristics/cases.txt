@@ -1,0 +1,23 @@
+Cases when human annotations (mis)match automated GT extraction
+
+Case    Ordered score
+incorrect context   7
+incorrect count from the context    6
+incorrect lower bound   5
+conincidentally correct counts  4
+superset    3 
+correct lower bounds/subsets    2
+correct match   1
+
+
+count
+----
+absolute
+	count & context match (1),
+	count mismatch & context match (3,6)
+	count match & context mismatch (4)
+	count & context mismatch (7)
+lower bound
+	count & context match (2)
+	count mismatch & context match (5)
+	count & context mismatch (7)

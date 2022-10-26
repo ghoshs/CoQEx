@@ -1,0 +1,51 @@
+qid,query,answer_norm,category,time_variant,kg_instances,kg_has_qualifier,instances_req,all_instances_req,has_complete_GT,qualifier_req
+4521,how many rio movies are there,2,entertainment,0,2,,1,1,1,0
+2051,how many husbands did princess margaret have,1,history,0,1,,1,1,1,0
+1282,how many wives did clint eastwood have,2,pop culture,0.25,2,,1,1,1,0
+2049,how many husbands did joe exotic have,2,pop culture,1,2,,1,1,1,0
+2423,how many jack reacher movies,2,entertainment,0,2,,1,1,1,0
+4099,how many pacific rim movies are there,2,entertainment,0,2,,1,1,1,0
+6025,how many zombieland movies are there,2,entertainment,0,2,,1,1,1,0
+2837,how many kids does nicky jam have,3,pop culture,1,0,,1,1,1,0
+4673,how many sailor moon movies are there,3,entertainment,0,3,,1,1,1,0
+454,how many beverly hills cop movies were made,4,entertainment,0,4,,1,1,1,0
+1029,how many siblings does chris cuomo have,4,pop culture,0,0,,1,1,1,0
+1728,how many gi joe movies are there,4,entertainment,1,4,,1,1,1,0
+2421,how many john wick movies are there,4,entertainment,1,4,,1,1,1,0
+2626,how many john wick movies were made,4,entertainment,1,4,,1,1,1,0
+2712,how many kids does cam newton have,4,pop culture,1,0,,1,1,1,0
+3341,how many mib movies,4,entertainment,0,4,,1,1,1,0
+3519,how many mythica movies are there,4,entertainment,0,4,,1,1,1,0
+4803,how many slugterra movies are there,4,entertainment,0,4,,1,1,1,0
+4940,how many siblings does donald trump have,4,pop culture,0,0,,1,1,1,0
+239,how many aot movies are there,5,entertainment,1,5,,1,1,1,0
+5041,how many times was kenny rogers married,5,pop culture,0,1,,1,1,1,0
+2825,how many kids does elon musk have,7,pop culture,1,0,,1,1,1,0
+4289,how many harry potter films,7,entertainment,0,7,,1,1,1,0
+1938,how many hilo books are there,8,literature,1,5,,1,1,1,0
+2448,how many jane austen novels are there,10,literature,0,5,,1,1,1,0
+2638,how many novels did jane austen write,10,literature,0,5,,1,1,1,0
+3731,how many novels did jane austen complete,10,literature,0,5,,1,1,1,1
+1841,how many hannah montana movies are there,13,entertainment,0,7,,1,1,1,0
+3231,how many maeve kerrigan books are there,13,literature,1,5,,1,1,1,0
+2964,how many kubrick movies,18,entertainment,0,5,,1,1,1,0
+2445,how many james bond movies were made,26,entertainment,1,5,,1,1,1,0
+746,how many cheech and chong movies are there,61,entertainment,0,7,,1,1,1,0
+1283,how many wives did king solomon have,2,history,0,2,,1,0,1,0
+1235,how many eddie murphy movies are there,50,entertainment,1,7,,1,1,0,0
+1032,how many siblings does steven adams have,4,pop culture,0,4,,1,1,0,0
+2128,how many indiana jones movies are there,5,entertainment,0,5,,1,1,0,0
+2620,how many jodi picoult books are there,16,literature,1,5,,1,1,0,0
+570,how many bruce lee movies are there,18,entertainment,0,5,,1,1,0,0
+222,how many aot books are there,24,literature,0,7,,1,1,0,0
+2447,how many jane austen movies are there,24,entertainment,1,7,,1,1,0,0
+2649,how many jrr tolkien books are there,34,literature,0,5,,1,1,0,1
+3804,how many ntr movies,39,entertainment,1,5,,1,1,0,0
+5617,how many wives did solomon have,2,history,0,2,,1,0,0,0
+2349,how many films irrfan khan acted,78,entertainment,0,5,,1,0,0,0
+2350,how many irrfan khan movies,78,entertainment,0,7,,1,0,0,0
+2637,how many novels did agatha christie write,78,literature,0,5,,1,0,0,1
+2639,how many novels did stephen king write,91,literature,1,5,,1,0,0,1
+2537,how many john wayne movies,92,entertainment,0,7,,1,0,0,0
+2538,how many john wayne movies are there,92,entertainment,0,7,,1,0,0,0
+3513,how many movies is morgan freeman in,94,entertainment,1,7,,1,0,0,0

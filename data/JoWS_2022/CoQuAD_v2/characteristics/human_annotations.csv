@@ -1,0 +1,223 @@
+qid,query,type,answer.default,answer_norm,category_extracted,category_human,category_ii,comments,human_annotations,match
+4521,how many rio movies are there,kg50,2,2,absolute,absolute,1,,2,1
+2051,how many husbands did princess margaret have,kg50,1,1,absolute,absolute,1,,1,1
+1282,how many wives did clint eastwood have,kg50,2,2,absolute,absolute,1,,2,1
+2049,how many husbands did joe exotic have,kg50,2,2,absolute,absolute,1,,2,1
+2423,how many jack reacher movies,kg50,2,2,absolute,absolute,1,,2,1
+4099,how many pacific rim movies are there,kg50,2,2,absolute,absolute,1,,2,1
+6025,how many zombieland movies are there,kg50,2,2,absolute,absolute,1,,2,1
+2837,how many kids does nicky jam have,kg50,3,3,absolute,absolute,1,,3,1
+4673,how many sailor moon movies are there,kg50,3,3,absolute,absolute,1,,3,1
+454,how many beverly hills cop movies were made,kg50,4,4,absolute,absolute,1,,4,1
+1029,how many siblings does chris cuomo have,kg50,4,4,absolute,absolute,1,,4,1
+1728,how many gi joe movies are there,kg50,4,4,absolute,absolute,1,,4,1
+2421,how many john wick movies are there,kg50,4,4,absolute,absolute,1,,4,1
+2626,how many john wick movies were made,kg50,4,4,absolute,absolute,1,,4,1
+2712,how many kids does cam newton have,kg50,4,4,absolute,absolute,1,,4,1
+3341,how many mib movies,kg50,4,4,absolute,absolute,1,,4,1
+3519,how many mythica movies are there,kg50,4,4,absolute,absolute,1,,4,1
+4803,how many slugterra movies are there,kg50,4,4,absolute,absolute,1,,4,1
+4940,how many siblings does donald trump have,kg50,4,4,absolute,absolute,1,,4,1
+239,how many aot movies are there,kg50,5,5,absolute,absolute,1,,5,1
+5041,how many times was kenny rogers married,kg50,5,5,absolute,absolute,1,,5,1
+2825,how many kids does elon musk have,kg50,7,7,absolute,absolute,1,,7,1
+4289,how many harry potter films,kg50,7,7,absolute,absolute,1,,7,1
+1938,how many hilo books are there,kg50,8,8,absolute,absolute,1,,8,1
+3231,how many maeve kerrigan books are there,kg50,13,13,absolute,absolute,1,,13,1
+2445,how many james bond movies were made,kg50,26,26,absolute,absolute,1,,26,1
+2128,how many indiana jones movies are there,kg50,5,5,absolute,absolute,1,,5,1
+756,how many circuit courts are there in the us,snippet100,12,12,absolute,absolute,1,,12,1
+6030,how many zones are in eritrea,snippet100,six,6,absolute,absolute,1,,6,1
+4035,how many opm ovas are there,snippet100,6,6,absolute,absolute,1,,6,1
+1000,how many deserts are in the us,snippet100,four,4,absolute,absolute,1,,4,1
+6037,how many zones was germany divided into,snippet100,four,4,absolute,absolute,1,,4,1
+3616,how many methods of ndt are there,snippet100,six,6,absolute,absolute,1,,6,1
+4667,how many sacraments are there in the catholic church,snippet100,seven,7,absolute,absolute,1,,7,1
+5096,how many territories does canada have,snippet100,three,3,absolute,absolute,1,,3,1
+4003,how many eminem albums went diamond,snippet100,two,2,absolute,absolute,1,,2,1
+2275,how many inactive volcanoes are in hawaii,snippet100,two,2,absolute,absolute,1,,2,1
+249,how many aqueducts did rome have,snippet100,11,11,absolute,absolute,1,,11,1
+5090,how many tribes of israel,snippet100,12,12,absolute,absolute,1,,12,1
+1573,how many fleets in the us navy,snippet100,seven,7,absolute,absolute,1,,7,1
+1209,how many ghosts visit ebenezer scrooge,snippet100,four,4,absolute,absolute,1,,4,1
+2889,how many knights of ren are there,snippet100,six,6,absolute,absolute,1,,6,1
+1879,how many airports in hcmc,snippet100,one,1,absolute,absolute,1,,1,1
+3011,how many airports in kiev,snippet100,three,3,absolute,absolute,1,,3,1
+3235,how many mafias are there in italy,snippet100,four,4,absolute,absolute,1,,4,1
+3005,how many belts in taekwondo,snippet100,9,9,absolute,absolute,1,,9,1
+2679,how many belts are there in jiu jitsu,snippet100,8,8,absolute,absolute,1,,8,1
+896,how many csu campuses are there in california,snippet100,23,23,absolute,absolute,1,,23,1
+3940,how many episodes of dublin murders,snippet100,eight,8,absolute,absolute,1,,8,1
+1631,how many ftas does south korea have,snippet100,18,18,absolute,absolute,1,,18,1
+2748,how many kazon sects are there,snippet100,18,18,absolute,absolute,1,,18,1
+1995,how many hof did kobe play with,snippet100,eight,8,absolute,absolute,1,,8,1
+3794,how many villages in nsukka,snippet100,4,4,absolute,absolute,1,,4,1
+2215,how many iits in india 2020,snippet100,23,23,absolute,absolute,1,,23,1
+1109,how many provinces in drc,snippet100,twenty-five,25,absolute,absolute,1,,25,1
+4859,how many southern states seceded,snippet100,11,11,absolute,absolute,1,,11,1
+3300,how many medical schools in texas,snippet100,fourteen,14,absolute,absolute,1,,14,1
+5072,how many tokyo ghoul re volumes are there,snippet100,16,16,absolute,absolute,1,,16,1
+208,how many anheuser busch breweries are there,snippet100,12,12,absolute,absolute,1,,12,1
+5142,how many temples in utah,snippet100,17,17,absolute,absolute,1,,17,1
+3400,how many mozart piano sonatas,snippet100,18,18,absolute,absolute,1,"18 solo piano sonatas, 6 piano four-hands, 1 two pianos sonata",18,1
+1643,how many funerals for george floyd,snippet100,four,4,absolute,absolute,1,,4,1
+3614,how many nfl players are from connecticut,snippet100,twenty-five,25,absolute,absolute,1,,25,1
+3635,how many nfl stadiums are there,snippet100,30,30,absolute,absolute,1,,30,1
+602,how many buzzer beaters does jordan have,snippet100,nine,9,absolute,absolute,1,,9,1
+945,how many czech players in nhl,snippet100,40,40,absolute,absolute,1,,40,1
+1305,how many rings does elway have,snippet100,two,2,absolute,absolute,1,,2,1
+4373,how many qurans,snippet100,20,20,absolute,absolute,1,,20,1
+2607,how many jr stations in tokyo,snippet100,five,5,absolute,absolute,1,,5,1
+5098,how many commissioners does tsc have,snippet100,nine,9,absolute,absolute,1,,9,1
+6042,how many varieties of zoysia grass are there,snippet100,three,3,absolute,absolute,1,,3,1
+3848,how many nxt championships are there,snippet100,17,17,absolute,absolute,1,,17,1
+5410,how many vatican museums are there,snippet100,54,54,absolute,absolute,1,,54,1
+2439,how many jails are in virginia,snippet100,41,41,absolute,absolute,1,,41,1
+1113,how many drdo centre are there in india,snippet100,50,50,absolute,absolute,1,,50,1
+2169,how many ifrs standards are notified in india,snippet100,41,41,absolute,absolute,1,,41,1
+1466,how many faa centers are there,snippet100,twenty-one,21,absolute,absolute,1,,21,1
+5127,how many dams does tva have,snippet100,49,49,absolute,absolute,1,,49,1
+2569,how many isa can you have,snippet100,four,4,absolute,absolute,1,,4,1
+1404,how many ethnic groups in china,snippet100,56,56,absolute,absolute,1,,56,1
+1949,how many hiqa standards are there,snippet100,60,60,absolute,absolute,1,,60,1
+4929,how many sworn officers in lapd,snippet100,9000,9000,absolute,absolute,1,,9000,1
+1560,how many fijian islands are there,snippet100,300,300,absolute,absolute,1,,300,1
+1847,how many hawaiian islands are there total,snippet100,137,137,absolute,absolute,1,,137,1
+2338,how many irish died in the famine,snippet100,1 million,1000000,absolute,absolute,1,,1000000,1
+958,how many dams are in china,snippet100,22104,22104,absolute,absolute,1,,22104,1
+1826,how many schools in gwinnett county,snippet100,143,143,absolute,absolute,1,,143,1
+2483,how many jci accredited hospitals in india,snippet100,38,38,absolute,absolute,1,,38,1
+4753,how many shlokas in valmiki ramayana,snippet100,24000,24000,absolute,absolute,1,,24000,1
+5389,how many us soldiers died in iraq,snippet100,4424,4424,absolute,absolute,1,,4424,1
+475,how many bhs stores in uk,snippet100,163,163,absolute,absolute,1,,163,1
+1671,how many gap inc stores are there,snippet100,3300,3300,absolute,absolute,1,,3300,1
+3079,how many lee's chicken locations are there,snippet100,135,135,absolute,absolute,1,,135,1
+3591,how many telstra stores in australia,snippet100,360,360,absolute,absolute,1,,360,1
+3951,how many eagle scouts per year,snippet100,47582,47582,absolute,absolute,1,,47582,1
+4030,how many ophthalmologists in the united states,snippet100,23861,23861,absolute,absolute,1,,23861,1
+4020,how many oompa loompas are in charlie and the chocolate factory,snippet100,165,165,absolute,absolute,1,,165,1
+3035,how many lakes in colorado,snippet100,4000,4000,absolute,absolute,1,,4000,1
+2141,how many members does iehp have,snippet100,1.25 million,1250000,absolute,absolute,1,,1250000,1
+4817,how many small businesses in florida,snippet100,2.5 million,2500000,absolute,absolute,1,,2500000,1
+818,how many employees does cn have,snippet100,24000,24000,absolute,absolute,1,,24000,1
+2123,how many idbi branches in tamilnadu,snippet100,84,84,absolute,absolute,1,,84,1
+3802,how many nato troops are in afghanistan,snippet100,17000,17000,absolute,absolute,1,,17000,1
+5298,how many uob branches in indonesia,snippet100,188,188,absolute,absolute,1,,188,1
+5366,how many branches of utkarsh bank in india,snippet100,499,499,absolute,absolute,1,,499,1
+3871,how many floats nyx,snippet100,44,44,absolute,absolute,1,,44,1
+2134,how many ieee fellows are there,snippet100,5082,5082,absolute,absolute,1,,5082,1
+2832,how many kibbutzim are in israel,snippet100,270,270,absolute,absolute,1,,270,1
+3107,how many lgas in australia,snippet100,537,537,absolute,absolute,1,,537,1
+3113,how many lgas in nsw,snippet100,128,128,absolute,absolute,1,,128,1
+3196,how many types of italian pastas are there,snippet100,350,350,absolute,absolute,1,,350,1
+1670,how many gangs are in the us,snippet100,33000,33000,absolute,absolute,1,,33000,1
+4349,how many qatari citizens are there,snippet100,313000,313000,absolute,absolute,1,as of 2017,313000,1
+3785,how many schools participate in nslp,snippet100,100000,100000,absolute,absolute,1,,100000,1
+5921,how many episodes of yu yu hakusho,snippet100,112,112,absolute,absolute,1,,112,1
+6032,how many zoey 101 episodes are there,snippet100,61,61,absolute,absolute,1,,61,1
+646,how many caves are in texas,snippet100,3000,3000,absolute,absolute,1,,3000,1
+767,how many counties in texas,snippet100,254,254,absolute,absolute,1,,254,1
+2292,how many inland lakes does wisconsin have,snippet100,15074,15074,absolute,absolute,1,,15074,1
+4663,how many satellites does earth have,snippet100,2666,2666,absolute,absolute,1,Currently orbiting,2666,1
+3679,how many nursing homes in washington state,snippet100,213,213,absolute,absolute,1,,213,1
+3489,how many mummies are in egypt,snippet100,70 million,70000000,absolute,absolute,1,,70000000,1
+4335,how many pyramids in sudan,snippet100,255,255,absolute,absolute,1,,255,1
+698,how many runways at cdg airport,snippet100,four,4,absolute,absolute,1,,4,1
+1782,how many gas stations in manhattan,snippet100,50,50,absolute,absolute,1,,50,1
+4115,how many pcns are there in england,snippet100,1300,1300,absolute,absolute,1,,1300,1
+4226,how many poems did emily dickinson write,snippet100,1800,1800,absolute,absolute,1,,1800,1
+1648,how many fusion centers are in the united states,snippet100,78,78,absolute,absolute,1,,78,1
+2030,how many nhs employees,snippet100,1.4 million,1400000,absolute,absolute,1,,1400000,1
+4703,how many employees does scm have,snippet100,2900,2900,absolute,absolute,1,,2900,1
+4782,how many lapd officers are there,snippet100,9000,9000,absolute,absolute,1,,9000,1
+5024,how many thai restaurants in usa,snippet100,5342,5342,absolute,absolute,1,,5342,1
+5185,how many ubl branches in pakistan,snippet100,1390,1390,absolute,absolute,1,,1390,1
+6046,how many zeta chapters are there,snippet100,257,257,absolute,absolute,1,,257,1
+6055,how many channels does zuku have,snippet100,42,42,absolute,absolute,1,As of 2019,42,1
+645,how many caucuses are there in congress,snippet100,165,165,absolute,absolute,1,,165,1
+3407,how many mp in india,snippet100,543,543,absolute,absolute,1,,543,1
+3847,how many members did nwo have,snippet100,62,62,absolute,absolute,1,,62,1
+4228,how many ppf account in india,snippet100,one,1,absolute,absolute,1,,1,1
+176,how many algerian in usa,snippet100,14716,14716,absolute,absolute,1,,14716,1
+504,how many black people in america,snippet100,42 million,42000000,absolute,absolute,1,,42000000,1
+1929,how many high schoolers are in the us,snippet100,56.6 million,56600000,absolute,absolute,1,,56600000,1
+1944,how many hindus are there in the world,snippet100,1.2 billion,1200000000,absolute,absolute,1,,1200000000,1
+3199,how many ltc in texas,snippet100,937419,937419,absolute,absolute,1,,937419,1
+5619,how many widows in the united states,snippet100,13.7 million,13700000,absolute,absolute,1,,13700000,1
+3583,how many nbme exams are there,snippet100,6,6,absolute,absolute,1,,6,1
+5066,how many died in tohoku earthquake,snippet100,20000,20000,absolute,absolute,1,,20000,1
+898,how many cts wagons were made,snippet100,7000,7000,absolute,absolute,1,,7000,1
+1190,how many swift dzire sold in india,snippet100,2.5 lakh units,2.5,absolute,absolute,1,,2.5,1
+4738,how many sgr trains are there in kenya,snippet100,30,30,absolute,absolute,1,,30,1
+5112,how many tuk tuks in india,snippet100,1.5 million,1500000,absolute,absolute,1,,1500000,1
+225,how many aoa sensors on airbus,snippet100,three,3,absolute,absolute,1,,3,1
+4430,how many rakat is maghrib,snippet100,3,3,absolute,absolute,1,,3,1
+490,how many bixby users,snippet100,10 Million,10000000,absolute,absolute,1,,10000000,1
+2196,how many iglesia ni cristo members in the world,snippet100,2.25 million,2250000,absolute,absolute,1,,2250000,1
+5697,how many wwe network subscribers are there,snippet100,1.949 million,1949000,absolute,absolute,1,,1949000,1
+2723,how many kakapos are left in the world,snippet100,142,142,absolute,absolute,1,,142,1
+2273,how many barangays in imus cavite,snippet100,97,97,absolute,absolute,1,,97,1
+149,how many ak47 have been made,snippet100,100 million,100000000,absolute,absolute,1,,100000000,1
+5952,how many strokes does zao have,snippet100,6,6,absolute,absolute,1,,6,1
+2562,how many jio users in india,snippet100,387.5 million,387500000,absolute,absolute,1,,387500000,1
+3587,how many nbn connections,snippet100,four,4,absolute,absolute,1,,4,1
+5397,how many arrows for vah ruta,snippet100,20,20,absolute,absolute,1,,20,1
+1155,how many gates does dtw have,snippet100,129,129,absolute,absolute,1,,129,1
+473,how many bhishma tank india have,snippet100,464,464,absolute,absolute,1,464 to be made,464,1
+682,how many cctv cameras in london,snippet100,627707,627707,absolute,absolute,1,,627707,1
+339,how many rooms does aulani have,snippet100,359,359,absolute,absolute,1,,359,1
+5425,how many rooms in vdara las vegas,snippet100,1495,1495,absolute,absolute,1,,1495,1
+4034,how many opm chapters are there,snippet100,113,113,absolute,absolute,1,As of May 2019 113.,113,1
+2010,how many jobs does barbie have,snippet100,over 200,200,lowerbound,lowerbound,2,Manual GT is also a lower bound of over 200,200,1
+427,how many bcf stores in australia,snippet100,over 115,115,lowerbound,lowerbound,2,Manual GT is also a lower bound of over 115 ,115,1
+5884,how many wineries in santa ynez valley,snippet100,over 120,120,lowerbound,lowerbound,2,Manual GT is also a lower bound of over 120 ,120,1
+3513,how many movies is morgan freeman in,kg50,At least 94,94,lowerbound,absolute,2,count Wikipedia filmography entries until 2020,94,1
+2447,how many jane austen movies are there,kg50,At least 24,24,lowerbound,lowerbound,2,"correct lower bound, only enumerations exist, multiple adaptations of each novel",24,1
+5,how many aiims in india,snippet100,13,13,absolute,lowerbound,3,"13 functional, others partially functional, under constructions, proposed, announced.",13,1
+1679,how many gay nfl players are there,snippet100,Six,6,absolute,lowerbound,3,"6 former players, GT is a lower bound",6,1
+4787,how many skoda dealers in the uk,snippet100,12,12,absolute,lowerbound,3,"12 Skoda showrooms by a particular dealer, lower bound GT",12,1
+4527,how many rivers in india,snippet100,Eight,8,absolute,lowerbound,3,"8 important and their tributaries, GT is a lower bound",8,1
+4635,how many ruth chris restaurants are in the united states,snippet100,82,82,absolute,,3,"As of 2002, number of restaurants in US and abroad, upper bound",82,1
+4000,how many ombudsman in australia,snippet100,seven,7,absolute,lowerbound,4,"7 state ombudsmen, plus state-wise industry ombudsmen",7,1
+5080,how many tourists visited italy in 2019,snippet100,63195203,63195203,absolute,absolute,6,"Extracted visit count for previous year, despite 2019 being present",62961013,0.996294180746599
+2637,how many novels did agatha christie write,kg50,At least 78,78,lowerbound,absolute,5,74 novels plus other works,74,0.948717948717949
+2649,how many jrr tolkien books are there,kg50,At least 34,34,lowerbound,absolute,2,"correct lower bound, 13 books while alive, 23 posthumous",36,0.944444444444444
+228,how many aoc french wines are there,snippet100,over 300,300,lowerbound,absolute,2,lookup references in the source page,318,0.943396226415094
+2448,how many jane austen novels are there,kg50,At least 10,10,lowerbound,absolute,5,"7 major, 2 posthumous, multiple novels within collections",9,0.9
+2638,how many novels did jane austen write,kg50,At least 10,10,lowerbound,absolute,5,"7 major, 2 posthumous, multiple novels within collections",9,0.9
+1235,how many eddie murphy movies are there,kg50,At least 50,50,lowerbound,absolute,2,"42 movies in Wikipedia filmography; IMDB 66 credits as of 2020 inclusing SNL, music videos",42,0.84
+4938,how many terminals at sxf,snippet100,five,5,absolute,absolute,3,"4 terminals, 5 terminal sections",4,0.8
+2349,how many films irrfan khan acted,kg50,At least 78,78,lowerbound,absolute,2,"correct lower bound, 98 movies on WP filmography,159 actor credits on IMDB which includes TV series, short films, music videos etc.",98,0.795918367346939
+2350,how many irrfan khan movies,kg50,At least 78,78,lowerbound,absolute,2,"correct lower bound, 98 movies on WP filmography,159 actor credits on IMDB",98,0.795918367346939
+2964,how many kubrick movies,kg50,18,18,absolute,absolute,3,"wikipedia say 13, IMDB has 16 director credits including documenaries",13,0.722222222222222
+3503,how many mvps does kobe bryant have,snippet100,five,5,absolute,absolute,3,"No aggregate count across MVPs.  NBA MVP: 1, NBA finals MVP: 2, NBA all-star game MVP: 4",7,0.714285714285714
+222,how many aot books are there,kg50,24,24,absolute,absolute,3,34 volumes ,34,0.705882352941176
+3731,how many novels did jane austen complete,kg50,At least 10,10,lowerbound,absolute,5,"counts all works, actual 7",7,0.7
+2639,how many novels did stephen king write,kg50,At least 91,91,lowerbound,absolute,5,"Until 2020, 61 novels, 11 collections, 5 non-fiction, multiple other works",61,0.67032967032967
+4921,how many supreme court judges are there,snippet100,as few as six,6,lowerbound,absolute,2,correct lower bound,9,0.666666666666667
+5017,how many tgi fridays are there in the us,snippet100,over 900,900,lowerbound,absolute,5,"900 in 60 countries, 566 in the US",566,0.628888888888889
+2620,how many jodi picoult books are there,kg50,At least 16,16,lowerbound,absolute,2,"correct lower bound, 26 books until 2020 and 2 co-written books",26,0.615384615384615
+1537,how many fgfa will india buy,snippet100,250,250,absolute,absolute,3,"Planned: 250, actual: 144",144,0.576
+2537,how many john wayne movies,kg50,At least 92,92,lowerbound,absolute,2,lookup references in the source page,170,0.541176470588235
+2538,how many john wayne movies are there,kg50,At least 92,92,lowerbound,absolute,2,lookup references in the source page,170,0.541176470588235
+4621,how many rtc in the philippines,snippet100,580,580,absolute,absolute,6,580 cases in 1100 RTCs,1100,0.527272727272727
+570,how many bruce lee movies are there,kg50,At least 18,18,lowerbound,absolute,2,"correct lower bound, 31 movies plus 6 posthumous",37,0.486486486486487
+1311,how many countries speak english,snippet100,27,27,absolute,absolute,3,"67 countries have Eng as primary official, 27 have it as secondary official  ",67,0.402985074626866
+542,how many books in the catholic bible,snippet100,27,27,absolute,absolute,3,"27 books in the New Testament, 46 in the Old Testament",73,0.36986301369863
+3013,how many kylie jean books are there,snippet100,8,8,absolute,absolute,3,"there are 22 books, context refers to a 8-books boxset",22,0.363636363636364
+4583,how many rovers are currently on mars,snippet100,four,4,absolute,absolute,3,"As of 2020 4 rovers already sent, active 1. As of 2022, 6 sent, 3 active",1,0.25
+446,how many become navy seals,snippet100,1000,1000,absolute,absolute,3,250 of the 1000 recruits join the Navy SEALs,250,0.25
+1032,how many siblings does steven adams have,kg50,4,4,absolute,absolute,3,4 of 18 siblings are known,18,0.222222222222222
+3949,how many eagle merit badges are there,snippet100,21,21,absolute,lowerbound,3,21 badges of more than 120,120,0.175
+3804,how many ntr movies,kg50,At least 39,39,lowerbound,absolute,2,"282 in Wikipedia filmography, IMDB: 292 credits",282,0.138297872340426
+746,how many cheech and chong movies are there,kg50,At least 61,61,lowerbound,absolute,7,"KG answer counts Cheech's movies from wikipedia page, together they have 6 movies",6,0.098360655737705
+1841,how many hannah montana movies are there,kg50,At least 13,13,lowerbound,absolute,7,counts the actor's movies not the characters,1,0.076923076923077
+2094,how many icar colleges in india,snippet100,three,3,absolute,absolute,3,"Central univ:3, deemed univ: 4, State univ: 64",71,0.042253521126761
+2413,how many iwo jima vets still living,snippet100,27,27,absolute,absolute,3,"Of the 27 vets, 1 is still living",1,0.037037037037037
+1025,how many died from spanish flu,snippet100,675000,675000,absolute,absolute,3,"United States: 675000, world: 50 million",50000000,0.0135
+3273,how many mcu movies was robert downey jr in,snippet100,2008,2008,absolute,absolute,7,"picks up the date, 8 instances as of 2020",8,0.00398406374502
+5357,how many utcs are there in the uk,snippet100,"over 14,000",14000,lowerbound,absolute,6,48 UTCs educating 14000 students,48,0.003428571428571
+1283,how many wives did king solomon have,kg50,2,2,absolute,lowerbound,3,"known names are 2, otherwise wives and concubines I nthe order of hundreds..",700,0.002857142857143
+5617,how many wives did solomon have,kg50,2,2,absolute,lowerbound,3,"known names are 2, otherwise wives and concubines I nthe order of hundreds..",700,0.002857142857143
+4837,how many ann taylor stores in canada,snippet100,2800,2800,absolute,absolute,6,"4 Ann Taylor shops in Canada, 2800 internationally",4,0.001428571428571
+5922,how many sons did yuyutsu have,snippet100,101,101,absolute,absolute,7,"wrong context, counts kaurava sons one of whom was yuyutsu",0,0
