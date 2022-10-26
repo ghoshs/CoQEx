@@ -1,0 +1,51 @@
+"qid","query","answer_norm","category","time_variant","kg_instances","kg_has_qualifier","instances_req","qualifier_req"
+3,"how many john wick movies are there",4,"entertainment","yes",4,,1,0
+4,"how many kids does cam newton have",4,"social","yes",0,,1,0
+6,"how many aot books are there",24,"books","no",7,,1,0
+9,"how many jack reacher movies",2,"entertainment","no",2,,1,0
+11,"how many jrr tolkien books are there",34,"books","no",5,,1,1
+13,"how many kids does elon musk have",7,"social","yes",0,,1,0
+16,"how many mythica movies are there",4,"entertainment","no",4,,1,0
+18,"how many times was kenny rogers married",5,"social","no",1,,1,0
+20,"how many wives did solomon have",2,"social","no",2,,1,0
+22,"how many zombieland movies are there",2,"entertainment","no",2,,1,0
+25,"how many aot movies are there",5,"entertainment","yes",5,,1,0
+31,"how many beverly hills cop movies were made",4,"entertainment","no",4,,1,0
+32,"how many bruce lee movies are there",18,"entertainment","no",5,,1,0
+36,"how many siblings does chris cuomo have",4,"social","no",0,,1,0
+37,"how many siblings does steven adams have",4,"social","no",4,,1,0
+41,"how many husbands did joe exotic have",2,"social","yes",2,,1,0
+44,"how many husbands did princess margaret have",1,"social","no",1,,1,0
+45,"how many indiana jones movies are there",5,"entertainment","no",5,,1,0
+48,"how many irrfan khan movies",78,"entertainment","no",7,,1,0
+49,"how many films irrfan khan acted",78,"entertainment","no",5,,1,0
+53,"how many james bond movies were made",26,"entertainment","yes",5,,1,0
+54,"how many jane austen novels are there",10,"books","no",5,,1,0
+56,"how many jane austen movies are there",24,"entertainment","yes",7,,1,0
+57,"how many ntr movies",39,"entertainment","yes",5,,1,0
+59,"how many pacific rim movies are there",2,"entertainment","no",2,,1,0
+61,"how many cheech and chong movies are there",61,"entertainment","no",7,,1,0
+63,"how many eddie murphy movies are there",50,"entertainment","yes",7,,1,0
+66,"how many wives did king solomon have",2,"social","no",2,,1,0
+67,"how many wives did clint eastwood have",2,"social","yes",2,,1,0
+68,"how many gi joe movies are there",4,"social","yes",4,,1,0
+70,"how many hannah montana movies are there",13,"entertainment","no",7,,1,0
+71,"how many hilo books are there",8,"books","yes",5,,1,0
+75,"how many john wayne movies",92,"entertainment","no",7,,1,0
+76,"how many john wayne movies are there",92,"entertainment","no",7,,1,0
+78,"how many jodi picoult books are there",16,"books","yes",5,,1,0
+81,"how many john wick movies were made",4,"entertainment","yes",4,,1,0
+82,"how many novels did jane austen write",10,"books","no",5,,1,0
+83,"how many novels did agatha christie write",78,"books","no",5,,1,1
+84,"how many novels did stephen king write",91,"books","no",5,,1,1
+86,"how many kids does nicky jam have",3,"social","yes",0,,1,0
+92,"how many kubrick movies",18,"entertainment","no",5,,1,0
+93,"how many maeve kerrigan books are there",13,"books","yes",5,,1,0
+94,"how many mib movies",4,"entertainment","no",4,,1,0
+99,"how many movies is morgan freeman in",94,"entertainment","yes",7,,1,0
+103,"how many novels did jane austen complete",10,"books","no",5,,1,1
+105,"how many harry potter films",7,"entertainment","no",7,,1,0
+106,"how many rio movies are there",2,"entertainment","no",2,,1,0
+109,"how many sailor moon movies are there",3,"entertainment","no",3,,1,0
+115,"how many slugterra movies are there",4,"entertainment","no",4,,1,0
+116,"how many siblings does donald trump have",4,"social","no",0,,1,0

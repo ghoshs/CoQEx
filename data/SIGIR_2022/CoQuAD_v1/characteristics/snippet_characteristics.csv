@@ -1,0 +1,101 @@
+"qid","query","answer_norm","category","time_variant","snippet_instances","snippet_has_qualifier","instances_req","qualifier_req"
+5397,"how many aiims in india",13,"education","yes",0,0,1,0
+5782,"how many bcf stores in australia",115,"organization",,0,0,1,0
+10903,"how many bhs stores in uk",163,"organization",,0,1,1,1
+11340,"how many branches of utkarsh bank in india",499,"organization",,0,0,1,1
+5961,"how many buzzer beaters does jordan have",9,"sports",,0,1,1,1
+7238,"how many circuit courts are there in the us",12,"politics",,0,1,1,1
+9968,"how many commissioners does tsc have",9,"organization",,0,1,1,1
+7388,"how many countries speak english",27,"demography","no",0,1,1,1
+4909,"how many czech players in nhl",40,"sports",,0,1,1,1
+6187,"how many dams are in china",22104,"structure",,0,1,1,1
+6226,"how many deserts are in the us",4,"geography","no",4,1,1,1
+6325,"how many drdo centre are there in india",50,"organization",,0,1,1,1
+7002,"how many eagle scouts per year",47582,"social",,0,1,1,1
+6046,"how many employees does cn have",24000,"organization",,0,0,1,1
+7607,"how many fijian islands are there",300,"geography","no",1,1,1,1
+6930,"how many floats nyx",44,"social",,0,0,1,1
+11079,"how many ftas does south korea have",18,"politics",,0,1,1,1
+7707,"how many gap inc stores are there",3300,"organization",,0,1,1,1
+7878,"how many hawaiian islands are there total",137,"geography","no",5,1,1,1
+7959,"how many hiqa standards are there",60,"health",,0,1,1,1
+7995,"how many hof did kobe play with",8,"sports",,0,0,1,1
+6463,"how many idbi branches in tamilnadu",84,"organization",,0,0,1,0
+5007,"how many ieee fellows are there",5082,"organization",,0,0,1,1
+6506,"how many ifrs standards are notified in india",41,"politics",,0,0,1,1
+5028,"how many irish died in the famine",1000000,"demography","no",0,1,1,1
+6739,"how many jails are in virginia",41,"architecture","yes",0,1,1,1
+6767,"how many jci accredited hospitals in india",38,"health","yes",0,1,1,1
+8008,"how many jobs does barbie have",200,"entertainment","yes",3,0,1,0
+11125,"how many jr stations in tokyo",5,"organization",,0,1,1,1
+8208,"how many kazon sects are there",18,"entertainment",,1,0,1,1
+8434,"how many kylie jean books are there",8,"entertainment",,0,1,1,1
+8452,"how many lakes in colorado",4000,"geography","no",0,0,1,1
+8494,"how many lee's chicken locations are there",135,"organization",,0,1,1,1
+6482,"how many members does iehp have",1250000,"industry",,0,0,1,1
+8956,"how many methods of ndt are there",6,"industry",,6,1,1,1
+5117,"how many mvps does kobe bryant have",5,"sports",,2,1,1,1
+11015,"how many nato troops are in afghanistan",17000,"politics",,0,0,1,1
+5153,"how many nxt championships are there",17,"sports",,0,1,1,1
+7060,"how many oompa loompas are in charlie and the chocolate factory",165,"entertainment","no",1,0,1,1
+7069,"how many ophthalmologists in the united states",23861,"demography","yes",0,0,1,0
+7072,"how many opm ovas are there",6,"entertainment",,0,1,1,1
+9326,"how many qurans",20,"social",,2,1,1,1
+7383,"how many rings does elway have",2,"sports",,0,1,1,1
+11282,"how many rtc in the philippines",580,"politics",,0,0,1,1
+9577,"how many sacraments are there in the catholic church",7,"social",,0,1,1,1
+7858,"how many schools in gwinnett county",143,"education","yes",0,1,1,1
+9651,"how many shlokas in valmiki ramayana",24000,"social",,0,1,1,1
+9673,"how many skoda dealers in the uk",12,"industry","yes",0,1,1,1
+9702,"how many small businesses in florida",2500000,"industry",,0,0,1,1
+5246,"how many sworn officers in lapd",9000,"demography","yes",0,1,1,1
+8928,"how many telstra stores in australia",360,"organization",,0,1,1,1
+5250,"how many tgi fridays are there in the us",900,"organization",,3,1,1,1
+4795,"how many tourists visited italy in 2019",63195203,"demography","no",0,1,1,1
+11335,"how many uob branches in indonesia",188,"organization",,0,0,1,1
+11343,"how many us soldiers died in iraq",4424,"politics",,0,1,1,1
+10198,"how many utcs are there in the uk",14000,"education","yes",0,0,1,1
+10795,"how many varieties of zoysia grass are there",3,"geography","no",3,1,1,1
+10247,"how many vatican museums are there",54,"architecture","no",2,0,1,1
+10784,"how many zones are in eritrea",6,"geography","no",0,1,1,1
+10789,"how many zones was germany divided into",4,"politics",,4,1,1,1
+4850,"how many ak47 have been made",100000000,"industry",,0,0,0,1
+10876,"how many algerian in usa",14716,"demography","yes",0,1,0,1
+5590,"how many aoa sensors on airbus",3,"other",,0,1,0,1
+6586,"how many barangays in imus cavite",97,"politics",,0,0,0,0
+5809,"how many become navy seals",1000,"demography","yes",0,1,0,1
+8159,"how many belts are there in jiu jitsu",8,"social",,1,1,0,1
+5865,"how many bixby users",10000000,"organization",,0,1,0,1
+5876,"how many black people in america",42000000,"demography","yes",0,1,0,1
+4901,"how many cts wagons were made",7000,"industry",,0,1,0,1
+9939,"how many died in tohoku earthquake",20000,"demography","no",0,1,0,1
+7594,"how many fgfa will india buy",250,"industry",,0,1,0,1
+7944,"how many high schoolers are in the us",56600000,"demography","yes",0,1,0,1
+7956,"how many hindus are there in the world",1200000000,"demography","yes",2,1,0,1
+6528,"how many iglesia ni cristo members in the world",2250000,"organization",,0,1,0,1
+8059,"how many isa can you have",4,"social",,0,1,0,1
+8048,"how many jio users in india",387500000,"organization",,0,0,0,1
+8184,"how many kakapos are left in the world",142,"wildlife",,0,1,0,1
+8604,"how many ltc in texas",937419,"social",,0,1,0,1
+8923,"how many nbme exams are there",6,"education","no",0,1,0,1
+8926,"how many nbn connections",4,"organization",,0,0,0,1
+11257,"how many ppf account in india",1,"social",,0,1,0,1
+9380,"how many rakat is maghrib",3,"social",,0,1,0,1
+9640,"how many sgr trains are there in kenya",30,"industry",,0,1,0,1
+10718,"how many strokes does zao have",6,"other",,0,0,0,1
+7263,"how many swift dzire sold in india",2.5,"industry","yes",0,1,0,1
+9978,"how many tuk tuks in india",1500000,"industry","yes",0,1,0,1
+10431,"how many widows in the united states",13700000,"demography","yes",0,1,0,1
+10486,"how many wwe network subscribers are there",1949000,"organization",,0,1,0,1
+10899,"how many bcc can you send in yahoo",100,"other",,,,,
+11042,"how many cctv cameras in london",627707,"other",,,,,
+6342,"how many data fields in dso",16,"other",,,,,
+7874,"how many haploid cells are produced during meiosis i",4,"other",,,,,
+10894,"how many miles from auckland to wellington",305,"other",,,,,
+11252,"how many miles from phoenix to sedona",119,"other",,,,,
+9208,"how many points in ppr league",30,"other",,,,,
+5696,"how many rooms does aulani have",359,"other",,,,,
+11345,"how many rooms in vdara las vegas",1495,"other",,,,,
+10523,"how many units of xeomin for glabellar",20,"other",,,,,
+8328,"knn how many features",2,"other",,,,,
+10390,"wcf how many instances",1,"other",,,,,

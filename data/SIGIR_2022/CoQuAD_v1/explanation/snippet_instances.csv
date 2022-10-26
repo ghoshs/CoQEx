@@ -1,0 +1,101 @@
+"qid","query","answer_norm","answer_enum"
+5397,"how many aiims in india",13,"[AIIMS Delhi, AIIMS Bhopal, AIIMS Bhubaneswar, AIIMS Jodhpur, AIIMS Patna, AIIMS Raipur, AIIMS Rishikesh, AIIMS Raebarely, AIIMS Nagpur, AIIMS Mangalgiri]"
+5782,"how many bcf stores in australia",115,"[Greenway Tuggeranont ACT, Bennets Green NSW, Armidale NSW, Blacktown Sydney, Auburn Sydney, Campbelltown Sydney, Bankstoen Sydney, Castle Hill Sydney, Belrose Sydney, Dubbo NSW]"
+10903,"how many bhs stores in uk",163,"[Cardiff, Broadstairs, London, Cheltenham, Leeds]"
+11340,"how many branches of utkarsh bank in india",499,"[Mumbai, Nagpur, Patna, Varanasi, Pune]"
+5961,"how many buzzer beaters does jordan have",9,"[Chicago Bulls vs. Cleveland Cavaliers,Chicago Bulls vs. Utah Jazz,Chicago Bulls vs. Detroit Pistons,Chicago Bulls vs. Cleveland Cavaliers,Chicago Bulls vs. Atlanta Hawks]"
+7238,"how many circuit courts are there in the us",12,"[First Circuit, Second Circuit, Third Circuit, Fourth Circuit, Fifth Circuit, Sixth Circuit, Seventh Circuit, Eight Circuit, Ninth Circuit, Tenth Circuit, Eleventh Circuit, Federal Circuit]"
+9968,"how many commissioners does tsc have",9,
+7388,"how many countries speak english",27,"[United States of America, England, Canada, Australia, New Zealand]"
+4909,"how many czech players in nhl",40,"[Jakub Vorácek, David Pastrnak, Ondrej Palat, Tomas Hertl, Pavel Zacha]"
+6187,"how many dams are in china",22104,"[Baihetan Dam, Baise Dam, Lower Baoquan Dam, Upper Baoquan Dam, Three Gorges Dam, Ahai Dam, Ankang Dam, Baogang Tailings Dam, Baozhusi Dam, Bashan Dam]"
+6226,"how many deserts are in the us",4,"[Great Basin, Mohave, Chihuahuan, Sonoran]"
+6325,"how many drdo centre are there in india",50,"[Integrated Test Range, Naval Materials research Laboratory, Centre for Airborne Systems, Centre for Aitificial Intelligence and Robotics, Aeronautical Development Establishment]"
+7002,"how many eagle scouts per year",47582,"[Neil Armstrong, Lee Berger, Guion Bluford, Thomas Cechz, Chris Pratt]"
+6046,"how many employees does cn have",24000,"[Robert Pace, Jean-Jacques Ruest, Margaret A. McKenzie]"
+7607,"how many fijian islands are there",300,"[Viti Levu, Vanua Levu, Taveuni Island, Ovalau, Rotuma, Malolo, Wakaya Island, Qalito Island, Mana Island, Beqa Island]"
+6930,"how many floats nyx",44,
+11079,"how many ftas does south korea have",18,"[Chile, Singapore, India, European Free Trade Association, ASEAN]"
+7707,"how many gap inc stores are there",3300,
+7878,"how many hawaiian islands are there total",137,"[Hawaii, Maui, Oahu, Kauai, Molokai, Lanai, Niihau, Kahoolawe, Nihoa, Necker]"
+7959,"how many hiqa standards are there",60,
+7995,"how many hof did kobe play with",8,
+6463,"how many idbi branches in tamilnadu",84,
+5007,"how many ieee fellows are there",5082,"[Lance Kaplan, Wenjun Zhang, Jose Cruz, Narsingh Deo, Thomas Kailath, Gerhard M. Sessler, Reimund Gerhard, Edward Wolff, Anant Madabhushi, Jacek Zurada]"
+6506,"how many ifrs standards are notified in india",41,
+5028,"how many irish died in the famine",1000000,
+6739,"how many jails are in virginia",41,"[Abingdon Police Jail, Washington County Jail, Accomack County Jail, Alberta WA Police Jail, Amherst Police Jail]"
+6767,"how many jci accredited hospitals in india",38,
+8008,"how many jobs does barbie have",200,
+11125,"how many jr stations in tokyo",5,
+8208,"how many kazon sects are there",18,"[Kazon-Ogla, Kazon-Oglamar, Kazon-Relora, Kazon-Nistrim, Kazon-Mostral, Kazon-Hobii, Kazon-Pommar]"
+8434,"how many kylie jean books are there",8,
+8452,"how many lakes in colorado",4000,"[Lake Granby, Horsetooth Reservoir, Blue Mesa Reservoir, Dillon Reservoir, Chatfield Reservoir, Green Mountain Reservoir, Lake San Cristobal, Shadow Mountain Lake]"
+8494,"how many lee's chicken locations are there",135,
+6482,"how many members does iehp have",1250000,
+8956,"how many methods of ndt are there",6,
+5117,"how many mvps does kobe bryant have",5,"[NBA Finals MVP, NBA All Star Game MVP]"
+11015,"how many nato troops are in afghanistan",17000,
+5153,"how many nxt championships are there",17,
+7060,"how many oompa loompas are in charlie and the chocolate factory",165,
+7069,"how many ophthalmologists in the united states",23861,
+7072,"how many opm ovas are there",6,
+9326,"how many qurans",20,
+7383,"how many rings does elway have",2,
+11282,"how many rtc in the philippines",580,
+9577,"how many sacraments are there in the catholic church",7,"[Baptism, Confirmation, Eucharist, Penance, Anointing of the Sick, Holy Orders, Matrimony]"
+7858,"how many schools in gwinnett county",143,
+9651,"how many shlokas in valmiki ramayana",24000,
+9673,"how many skoda dealers in the uk",12,
+9702,"how many small businesses in florida",2500000,
+5246,"how many sworn officers in lapd",9000,
+8928,"how many telstra stores in australia",360,
+5250,"how many tgi fridays are there in the us",900,
+4795,"how many tourists visited italy in 2019",63195203,
+11335,"how many uob branches in indonesia",188,
+11343,"how many us soldiers died in iraq",4424,
+10198,"how many utcs are there in the uk",14000,
+10795,"how many varieties of zoysia grass are there",3,
+10247,"how many vatican museums are there",54,"[Pinacoteca Vaticana, Museo Pio-Clementino, Collection of Modern Religious Art, Museo Chiaramonti, Vatican Historical Museum]"
+10784,"how many zones are in eritrea",6,"[Anseba, Debub (South), Debubawi K'eyih Bahri (Southern Red Sea), Gash Barka, Ma'akel (Central), Semenawi K'eyih Bahri (Northern Red Sea)]"
+10789,"how many zones was germany divided into",4,"[Soviet occupation zone, French occupation zone, British occupation zone, US occupation zone]"
+4850,"how many ak47 have been made",100000000,
+10876,"how many algerian in usa",14716,
+5590,"how many aoa sensors on airbus",3,
+6586,"how many barangays in imus cavite",97,
+5809,"how many become navy seals",1000,
+8159,"how many belts are there in jiu jitsu",8,
+5865,"how many bixby users",10000000,
+5876,"how many black people in america",42000000,
+4901,"how many cts wagons were made",7000,
+9939,"how many died in tohoku earthquake",20000,
+7594,"how many fgfa will india buy",250,
+7944,"how many high schoolers are in the us",56600000,
+7956,"how many hindus are there in the world",1200000000,
+6528,"how many iglesia ni cristo members in the world",2250000,
+8059,"how many isa can you have",4,
+8048,"how many jio users in india",387500000,
+8184,"how many kakapos are left in the world",142,
+8604,"how many ltc in texas",937419,
+8923,"how many nbme exams are there",6,
+8926,"how many nbn connections",4,
+11257,"how many ppf account in india",1,
+9380,"how many rakat is maghrib",3,
+9640,"how many sgr trains are there in kenya",30,
+10718,"how many strokes does zao have",6,
+7263,"how many swift dzire sold in india",2.5,
+9978,"how many tuk tuks in india",1500000,
+10431,"how many widows in the united states",13700000,
+10486,"how many wwe network subscribers are there",1949000,
+10899,"how many bcc can you send in yahoo",100,
+11042,"how many cctv cameras in london",627707,
+6342,"how many data fields in dso",16,
+7874,"how many haploid cells are produced during meiosis i",4,
+10894,"how many miles from auckland to wellington",305,
+11252,"how many miles from phoenix to sedona",119,
+9208,"how many points in ppr league",30,
+5696,"how many rooms does aulani have",359,
+11345,"how many rooms in vdara las vegas",1495,
+10523,"how many units of xeomin for glabellar",20,
+8328,"knn how many features",2,
+10390,"wcf how many instances",1,
