@@ -28,12 +28,12 @@ Here we provide the data for our paper:
 - <i>Answering Count Queries with Explanatory Evidence</i> Ghosh et al. SIGIR 2022 (<https://dl.acm.org/doi/pdf/10.1145/3477495.3531870>).
 - <i>Answering Count Queries with Structured Answers from Text</i> Ghosh et al. submitted to JoWS (<https://arxiv.org/pdf/2209.07250.pdf>)
 
-And the code for setting up an interactive user demonstration.
+And the code for setting up an interactive user demonstration. Try out our [user demonstration of CoQEx](https://nlcounqer.mpi-inf.mpg.de/) which allows free 100 queries per day.
 
 
 ## Data <a name="data"></a>
 
-The [data](https://github.com/ghoshs/CoQEx/tree/main/data) for the [SIGIR'22](https://github.com/ghoshs/CoQEx/tree/main/data/SIGIR_2022#readme) and [JoWS](https://github.com/ghoshs/CoQEx/tree/main/data/JoWS_2022#readme) experiments can be found in the respective folders. The dataset comprises:
+The data for the [SIGIR'22](https://github.com/ghoshs/CoQEx/tree/main/data/SIGIR_2022#readme) and [JoWS](https://github.com/ghoshs/CoQEx/tree/main/data/JoWS_2022#readme) experiments can be found in the respective folders in [data](https://github.com/ghoshs/CoQEx/tree/main/data). The dataset comprises:
 
 - `CoQuAD` dataset - training data for inference, groundtruth annoatation for infernce, contextualization and explanations, annotated dataset characteristics. Version 2 contains more evaluation data and query characteristics.
 
@@ -48,7 +48,7 @@ Run [`./download.sh`](https://github.com/ghoshs/CoQEx/blob/main/data/download.sh
 
 ## Code <a name="code"></a>
 
-The code for setting up a Flask app of CoQEx is included in the folder `coqex/`.
+The code for setting up a Flask app of CoQEx is included in the folder [`coqex/`](https://github.com/ghoshs/CoQEx/tree/main/coqex).
  
 A pipeline for executing CoQEx coming up soon.
 
